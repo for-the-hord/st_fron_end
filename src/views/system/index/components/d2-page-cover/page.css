@@ -1,0 +1,19 @@
+.el-input-group__append {
+    color: white;
+    background: -webkit-linear-gradient(left, #E04942 , #E04942 );
+    cursor: pointer;
+    /* display: flex; */
+    /* align-items: c; */
+}
+
+ 
+.san2:hover,
+.markss:hover,
+.marks:hover {
+    color: #42DAF9 !important;
+}
+
+.marks:nth-child(4):hover .san2 {
+    color: #42DAF9 !important;
+}
+ 

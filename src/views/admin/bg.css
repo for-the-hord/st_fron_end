@@ -1,0 +1,265 @@
+ .qd-table .el-table__header th {
+     text-align: center;
+     /* text-align: left !important; */
+     /* background: #2056BD !important; */
+     /* color: white !important; */
+ }
+ 
+ .qd-table td {
+     /* color: #e4e7ed !important */
+ }
+ 
+ .d2-theme-container-main-body {
+     /* background: #071f4b !important; */
+ }
+ 
+ .qd-filter .filter-text.el-input--suffix .el-input__inner,
+ .qd-filter .filter-time.el-input--suffix .el-input__inner,
+ .qd-filter .filter-datetime.el-input--suffix .el-input__inner {
+     color: #fff !important;
+     ;
+ }
+ 
+ .el-input__inner-placeholder {
+     /* WebKit browsers */
+     color: #ffffff99;
+     font-size: 16px;
+ }
+ 
+ .el-select-dropdown__item.hover,
+ .el-select-dropdown__item:hover {
+     background: #6bbac6 !important;
+ }
+ 
+ .el-select-dropdown__item {
+     color: #6bbac6 !important;
+ }
+ 
+ .el-popper .popper__arrow {
+     display: none !important;
+ }
+ 
+ .el-popper .popper__arrow::after {
+     display: none !important;
+ }
+ 
+ .el-picker-panel {
+     color: white;
+ }
+ 
+ .el-date-table th,
+ .el-date-range-picker__content .el-date-range-picker__header div {
+     color: #42DAF9;
+ }
+ 
+ .el-range-editor--medium .el-range-input {
+     background: #001d4c !important;
+     color: #ffffff99 !important;
+ }
+ 
+ .el-picker-panel__icon-btn {
+     color: white !important;
+ }
+ 
+ .el-picker-panel {
+     background: #001d4c !important;
+     border: 1px solid #42DAF9;
+ }
+ 
+ .el-date-table td.disabled div {
+     background: none !important;
+     color: #8997AC !important;
+ }
+ 
+ .el-date-table td.in-range div {
+     background: none !important;
+ }
+ 
+ .el-date-table td span {
+     border-radius: 0 !important;
+ }
+ 
+ .el-date-table td.end-date span,
+ .el-date-table td.start-date span {
+     background-color: rgb(64 158 255 / 0%);
+     border: 1px solid #42daee;
+ }
+ 
+ .el-date-table td.prev-month {
+     /* color: #606262; */
+ }
+ 
+ .el-date-editor .el-range__icon {
+     position: absolute;
+     right: 10px;
+ }
+ 
+ .qd-table .el-table td {
+     /* text-align: left !important; */
+     background: #fff0 !important;
+ }
+ 
+ .el-table th.is-leaf {
+     border-bottom: none !important;
+ }
+ 
+ .el-table td {
+     border-bottom: 1px solid #eeeeee0d !important;
+ }
+ 
+ .qd-table .pagination-container {
+     color: #fff !important;
+     background-color: #3e252500 !important;
+ }
+ 
+ .el-pagination__total {
+     color: black;
+ }
+ 
+ .el-pagination.is-background .btn-prev,
+ .el-pagination.is-background .btn-next {
+     background-color: #3e252500;
+ }
+ 
+ .el-pagination.is-background .el-pager li:not(.disabled).active {
+     background-color: #11446B;
+     color: #FFF;
+ }
+ 
+ .el-rate__text {
+     display: none;
+ }
+ 
+ .positions thead {
+     /* display: none; */
+ }
+ 
+ .qd-table thead,
+ .qd-table .el-pagination__jump {
+     /* display: none ; */
+ }
+ 
+ .el-pagination__jump {
+     /* display: none; */
+ }
+ 
+ .qd-table .el-pager li {
+     background: #fff0;
+     color: black;
+ }
+ 
+ .qd-table .el-pager li.active {
+     color: #409EFF;
+ }
+ 
+ .qd-table .el-pagination .btn-prev,
+ .qd-table .el-pagination .btn-next {
+     background: #fff0;
+     color: white;
+ }
+ 
+ .scope_cc {
+     pointer-events: none;
+     -moz-user-select: none;
+     /* 火狐 */
+     -webkit-user-select: none;
+     /* 谷歌 */
+     -ms-user-select: none;
+     /* IE */
+     user-select: none;
+ }
+ 
+ .el-rate {
+     float: right;
+ }
+ 
+ .el-pagination__jump {
+     color: black;
+ }
+ 
+ .el-table::before {
+     background-color: none !important;
+ }
+ 
+ .el-table {
+     background-color: none;
+ }
+ 
+ .el-table::before {
+     background-color: none;
+ }
+ /* .qd-table .cell {
+     padding: 10px !important;
+     padding-left: 20px !important;
+ } */
+ 
+ .wangpengbg .el-table__empty-block {
+     display: none !important;
+ }
+ 
+ .el-table__fixed-right::before,
+ .el-table__fixed::before {
+     background-color: none !important;
+ }
+ 
+ .lds_shange_left .el-pagination {
+     background: #fff0 !important;
+ }
+ 
+ .el-pagination .btn-next,
+ .el-pagination .btn-prev {
+     background: #fff0 !important;
+     color: white !important;
+ }
+ 
+ .el-pager li {
+     background: #fff0 !important;
+     color: white !important;
+ }
+ 
+ .el-pager li.active {
+     color: #409EFF !important;
+ }
+ 
+ .el-pager li.active {
+     color: #409EFF !important;
+ }
+ 
+ .qd-table .qd-table-cell10 .cell {
+     /* padding: 0px !important; */
+     padding-left: 40px !important;
+ }
+ /* .qd-table .cell{
+    padding-left:40px !important;
+} */
+ /* .el-table__fixed-right::before, .el-table__fixed::before */
+ /* 系统设置界面的类名可以用这个该 */
+ /* #ebeef5 */
+ /* #42DAF9 */
+ /* #124d78 */
+ /* #2d87a8 */
+ /* .qd-table thead,
+.qd-table .el-pagination__jump {
+    display: block !important;
+}
+
+.el-pagination__jump {
+    display: block;
+} */
+ 
+ .tabletd_center .qd-table .el-table th,
+ .tabletd_center .qd-table .el-table td {
+     text-align: center !important;
+ }
+ 
+ .el-table--border .el-table__cell {
+     border-right: none !important;
+ }
+ 
+ .qd-table-cell10 .cell {
+     padding: 0px !important;
+ }
+ 
+ .jigou .el-form--inline .el-form-item__label {
+     color: black !important;
+ }

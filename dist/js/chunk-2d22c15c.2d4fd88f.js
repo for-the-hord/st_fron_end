@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d22c15c"],{f271:function(e,r,n){"use strict";n.r(r),r["default"]={beforeRouteEnter(e,r,n){n(e=>e.$router.replace(JSON.parse(r.params.route)))},render:e=>e()}}}]);
