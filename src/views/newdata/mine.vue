@@ -141,7 +141,7 @@
         <el-form-item label="单位名称：" prop="name">
           <el-input v-model="formInline4.name" placeholder="请输入单位名称" style="width: 80%"></el-input>
         </el-form-item>
-        <el-form-item label="模板：" prop="template_ids">
+        <!-- <el-form-item label="模板：" prop="template_ids">
           <el-checkbox-group v-model="formInline4.template_ids">
             <el-checkbox
               v-for="(item, key) in body_list"
@@ -153,9 +153,42 @@
               {{ item.name }}
             </el-checkbox>
           </el-checkbox-group>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item style="text-align: right !important" v-show="danwei == 1">
+      
+
+      <div class="qd-table" style="position: relative; margin: 0 auto">
+        <el-table
+          v-if="body_list"
+          :data="body_list"
+          style="width: 100%"
+          stripe
+          v-loading="loading"
+          @cell-mouse-enter="hover_table_lds"
+          @row-click="goDetail"
+          :header-cell-style="header_style"
+          :cell-style="body_style"
+          @selection-change="handleSelectionChange2"
+        >
+          <el-table-column type="selection" width="55"> </el-table-column>
+          <el-table-column prop="name" label="模板名称" :cell-style="timeStyle">
+            <template slot-scope="scope">
+              <span style="cursor: pointer"> {{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="操作" :cell-style="timeStyle">
+            <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="set_look(scope.row)" icon="el-icon-zoom-in">预览</el-button>
+
+            </template>
+          </el-table-column>
+
+          
+        </el-table>
+      </div>
+
+
+      <el-form-item style="text-align: right !important" v-show="danwei == 1">
           <el-button type="primary" @click="submitRow3('formInline4')">新增单位</el-button>
           <el-button type="primary_test" @click="reset('formInline4')">取消</el-button>
         </el-form-item>
@@ -165,6 +198,8 @@
           <el-button type="primary_test" @click="reset('formInline4')">取消</el-button>
         </el-form-item>
       </el-form>
+
+
     </qd-dialog>
   </d2-container>
 </template>
@@ -248,6 +283,7 @@ export default {
       options_unit_name: [],
       options_formwork_name: [],
       select_arr: [],
+      select_arr2: [],
       loading: false,
       flag: 0,
       new_visible: false,
@@ -315,6 +351,9 @@ export default {
     });
   },
   methods: {
+    set_look(x){
+       console.log(x)
+    },
     getU() {
       getUnitSearch().then((res) => {
         console.log(res);
@@ -342,6 +381,16 @@ export default {
         new_arr.push(e.id);
       });
       this.select_arr = new_arr;
+    },
+    handleSelectionChange2(x) {
+      console.log(x, '弹窗当前选中');
+      let new_arr = [];
+      x.map((e) => {
+        new_arr.push(e.id);
+      });
+      this.select_arr2 = new_arr;
+      console.log(this.select_arr2, '弹窗当前选中2');
+      
     },
     delRow() {
       if (this.select_arr.length < 1) {
