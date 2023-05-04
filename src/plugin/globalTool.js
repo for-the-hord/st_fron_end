@@ -20,37 +20,37 @@ let tools = {
 //   };
 //   Vue.prototype.$axios = axios;
 
-//   //   下载方法
-//   Vue.prototype.downloadExcel = function (url, name, data) {
+//   下载方法
+// Vue.prototype.downloadExcel = function(url, name, data) {
 //     console.log(name)
-//     // console.log(axios.headers['token'])
-//     // axios.headers['token'] = getToken
+//         // console.log(axios.headers['token'])
+//         // axios.headers['token'] = getToken
 //     axios({
-//       url: url,
-//       method: 'post',
-//       responseType: 'blob', // important
-//       headers: {
-//         'token': getToken() //设置token 其中K名要和后端协调好
-//       },
-//       data: data
+//         url: url,
+//         method: 'post',
+//         responseType: 'blob', // important
+//         headers: {
+//             'token': getToken() //设置token 其中K名要和后端协调好
+//         },
+//         data: data
 //     }).then((resp) => {
-//       let data = resp.data;
-//       let blob = new Blob([data], {
-//         type: 'application/octet-stream'
-//       });
-//       let url = window.URL.createObjectURL(blob);
-//       let link = document.createElement("a");
-//       link.style.display = "none";
-//       link.href = url;
-//       link.setAttribute("download", name);
-//       document.body.appendChild(link);
-//       link.click();
-//       document.body.removeChild(link);
-//       window.URL.revokeObjectURL(url)
-//     }).catch(function (error) {
-//       console.log(error)
+//         let data = resp.data;
+//         let blob = new Blob([data], {
+//             type: 'application/octet-stream'
+//         });
+//         let url = window.URL.createObjectURL(blob);
+//         let link = document.createElement("a");
+//         link.style.display = "none";
+//         link.href = url;
+//         link.setAttribute("download", name);
+//         document.body.appendChild(link);
+//         link.click();
+//         document.body.removeChild(link);
+//         window.URL.revokeObjectURL(url)
+//     }).catch(function(error) {
+//         console.log(error)
 //     });
-//   };
+// };
 // }
 
 

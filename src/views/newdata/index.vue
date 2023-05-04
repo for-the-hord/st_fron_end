@@ -111,7 +111,7 @@
             </el-form-item>
 
             <el-form-item label="导入模板：" v-show="flag == 0">
-              <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
+              <el-button type="primary" icon="" @click="doExport()">导出文件</el-button>
               <input
                 style="font-size: 16px"
                 type="file"
@@ -125,6 +125,7 @@
 
             <div v-if="new_visible" id="luckysheet" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
             <br />
+            <!-- <table class="lds" v-html="datas"></table> -->
 
             <el-form-item style="text-align: right !important" v-show="flag == 1">
               <el-button type="primary" @click="submitRow1('formInline3')">提交模板</el-button>
@@ -197,10 +198,15 @@ import {
   addFormwork,
   delFormwork,
   putFormworkItem,
+  getexcel,
   paperEdit,
   paperCreate,
   paperRevoke,
 } from './big';
+import * as XLSX from 'xlsx';
+// import XLSX from 'xlsx';
+
+import axios from 'axios';
 
 export default {
   name: 'Paper',
@@ -212,6 +218,8 @@ export default {
   },
   data() {
     return {
+      new_all: null,
+      datas: null,
       options: {
         container: 'luckysheet', // 设定DOM容器的id
         title: '数据填报系统表格', // 设定表格名称
@@ -335,7 +343,7 @@ export default {
         name: '',
         equipment_name: [],
         is_file: '',
-        formwork: {},
+        formwork: null,
       },
       options_equipment_name: [
         {
@@ -355,29 +363,347 @@ export default {
         is_file: [{ required: true, message: '请选择', trigger: 'blur' }],
       },
       times: '',
+      excelBuffer: null,
+      file: null,
     };
   },
   created() {
     this.getFormwork_list();
+    //     axios
+    //       .post('http://123.57.210.116:89/api/getexcel', {})
+    //       .then((response) => {
+    //         const reader = new FileReader();
+    //         reader.readAsText(response.data, 'utf-8');
+    //         reader.onload = function () {
+    //         console.log(reader.result)
+    //         // const t = JSON.parse(reader.result as string);  // 这里就得到了json
+    // }
+
+    //         // console.log(JSON.parse(response.data),'44444444444' );
+    //       let a   =  response.arrayBuffer()
+    //         // let a = new arrayBuffer(response.data);
+    //         console.log(a, '22222222');
+    //         let workbook = XLSX.read(a, { type: 'array' });
+    //         console.log(workbook, '3333');
+
+    //         //获取第一个工作表
+    //         let firstSheetName = workbook.SheetNames[0];
+    //         const worksheet = workbook.Sheets[firstSheetName];
+
+    //         const datas = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    //         this.datas = datas;
+    //         console.log(datas, 'datas');
+    //         console.log(this.datas, 'datas2');
+    //         // console.log(JSON.parse(response.data));
+
+    //         // let reader = new FileReader();
+    //         // console.log(reader, 'reader');
+    //         // // reader.readAsDataURL(response.data);
+    //         // // console.log(reader.readAsDataURL(response.data)
+
+    //         // reader.readAsDataURL(response.data);
+    //         // reader.onload = function () {
+    //         //   console.log(reader.result);
+    //         // };
+
+    //         //  let blobs = new Blob(response.data)
+    //       })
+    //       // reader.readAsArrayBuffer(response.data);
+    //       //   reader.readAsArrayBuffer(blobs);
+    //       //   console.log(reader.readAsArrayBuffer(blobs)
+    //       //   )
+    //       //   const excelBuffer = response.data.blob();
+    //       //   console.log(excelBuffer, 'excelBuffer');
+
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
+
+    //   fetch('http://123.57.210.116:89/api/getexcel').then(res=>{
+    //   console.log(res,'22222222')
+    // //  let workbook = XLSX.read(a,{  type: 'array' });
+    //  console.log(workbook,'3333')
+
+    // //     console.log(res,'22222222')
+    // //     console.log(res.blob(),'11111')
+    // //     var str2 = String.fromCharCode(res);
+    // //     console.log(str2,'str2')
+
+    // //     let bb = res.blob()
+    // //     console.log(bb,'555')
+    // //  reader.readAsArrayBuffer(bb);
+
+    // //   const excelBuffer =   res.arrayBuffer();
+
+    //   })
+
+    // axios.post
+    // /api/getexcel/
+    //     getexcel().then((res) => {
+    //       console.log(res, '00000000000000000000res');
+    //   const excelBuffer =   res.arrayBuffer();
+    //  console.log(excelBuffer,'excelBuffer')
+    //     });
+    this.getssss();
   },
   methods: {
+    // axios({
+    //       method: 'get',
+    //       url: process.env.VUE_APP_BASE_API + '/data-source-file/exportExcel/' + this.search.month,
+    //       responseType: 'arraybuffer',
+    //     }).then(res => {
+    //       const data = res.data
+    //       var blob = new Blob([data], {
+    //         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    //       });
+    //       console.log("====blob====", blob)
+    //       const file = new window.File(
+    //         [blob], // blob
+    //         'Filename.xlsx',
+    //         { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+    //       );
+    //       console.log("====file====", file)
+    //       this.uploadExcel1(file)
+    //     }),
+    async set_axios() {
+      var fd = new FormData();
+      //   fd.append('id', '234');
+      //   fd.append('id2', '111');
+      //   fd.append('id3', '222');
+      let new_blobs = sessionStorage.getItem('final_blob');
+      let new_blobs2 = localStorage.getItem('final_blob');
+      console.log(new_blobs, 'new_blobs');
+      console.log(new_blobs2, 'new_blobs2');
+
+      //    const blob = new Blob([data], {
+      //     type: 'application/vnd.ms-excel;charset=utf-8'
+      // })
+      // console.log(blob, "导出成功！blob")
+      // final_blob = blob
+      // console.log(final_blob, "导出成功！final_blob")
+      // console.log(axios, 'ssssaxiossssssssssssssssssssssss');
+
+      // return
+
+      //   fd.append('file', new_blobs);
+      //   fd.append = ('file', new_blobs2 );
+      //   console.log(fd, 'df');
+      // return
+      //   fd =  new_blobs2
+
+      //       var payload = { file: fd };
+
+      //       axios({
+      //     url: 'http://localhost:8080/api/addFormwork',
+      //     method: 'post',
+      //     headers: {
+      //         'Content-Type': 'multipart/form-data'
+      //     },
+      //     data: payload
+      // }).then(res=>{
+      //     console.log(res)
+      // })
+
+      //要是用new window.FormData();不然会报错
+      var formData = new window.FormData();
+      // var file = this.$refs.getAddFile.files[0];
+      // var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+      // if (file != undefined) {
+      formData.append('file', this.file, 'test.xlsx');
+      formData.append('id', '郭哥');
+      formData.append('name', this.formInline3);
+      formData.append('work', 'lds');
+      // }
+      axios.post('http://localhost:8080/api/addFormwork', formData, {}).then(function (dat) {
+        console.info(dat.data, 'dddddddddddddd');
+        // 操作成功弹出框
+      });
+
+      //       const all = await axios.post('http://localhost:8080/api/addFormwork',fd, {headers: {
+      //  'Content-Type': `multipart/form-data;  `,
+      //  },}  );
+      //   console.log(all, 'bbbbbbbbbbbbbbbbbbbbb');
+    },
+
+    //     import request from 'utils/request';
+    //    export const uploadFileRequest = ({ file }) => {
+    //  const data = new FormData();
+    //  data.append('file', file, file.name);
+    //    return request.post(`/files`, data, {
+    //  headers: {
+    //  'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+    //  },
+    //  timeout: 30000,
+    //  });
+    //  };
+
+    // async sendBlobData(blob) { const formData = new FormData(); formData.append('file', blob, 'example.xlsx'); const response = await fetch('/your_upload_endpoint', { method: 'POST', body: formData, }); if (response.ok) { console.log('Blob data successfully sent to backend'); } else { console.error('Failed to send Blob data to backend'); } },
+    async sendBlobData() {
+      let new_blobs = sessionStorage.getItem('final_blob');
+      let new_blobs2 = localStorage.getItem('final_blob');
+      console.log(new_blobs, 'new_blobs');
+      console.log(new_blobs2, 'new_blobs2');
+      const formData = new FormData();
+      formData.append('file', new_blobs2);
+      const response = await axios.post('http://123.57.210.116:89/api/addFormwork', {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        body: formData,
+      });
+      console.log(response, 'response');
+    },
+
+    async getssss() {
+      const all = await axios({
+        method: 'post',
+        url: 'http://123.57.210.116:89/api/getexcel',
+        responseType: 'arraybuffer',
+      });
+      console.log(all, 'aaaaaaaaaaaaaa');
+      console.log(all.data, 'cccccccccc');
+      this.new_all = all.data;
+      console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
+
+      const excelBlob = all.data;
+      var blob = new Blob([excelBlob], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      console.log(excelBlob, '====excelBlob====');
+      console.log(blob, '====blob====');
+
+      const file = new window.File(
+        [blob], // blob
+        'Filename.xlsx',
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      console.log('====file====', file);
+      this.file = file;
+
+      //   fetch('http://123.57.210.116:89/api/getexcel', {
+      //     method: 'post',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //   }).then(res=>{
+      //     console.log(res,'777777777777777777777777')
+      //   })
+
+      //   let blob = new Blob([all.data], {type: "application/vnd.ms-excel"});
+      //                 let a = document.createElement('a');
+
+      //                let objectUrl = URL.createObjectURL(blob);
+      //                a.setAttribute("href",objectUrl);
+      //                a.setAttribute("download", 'test.xls');
+      //                a.click();
+
+      //   const excelBuffer = await excelBlob.arrayBuffer();
+      //   this.excelBuffer = excelBuffer;
+
+      //   let workbook = XLSX.read(all_buffer, { type: 'string' });
+      //         console.log(workbook, '3333');
+
+      //         //获取第一个工作表
+      //         let firstSheetName = workbook.SheetNames[0];
+      //         const worksheet = workbook.Sheets[firstSheetName];
+
+      //         const datas = XLSX.utils.sheet_to_json(worksheet,   { header: 1 });
+      //         // const datas = XLSX.utils.sheet_to_csv(worksheet,   { header: 1 });
+      //         // const datas = XLSX.utils.sheet_to_txt(worksheet,   { header: 1 });
+      //         // const datas = XLSX.utils.sheet_to_html(worksheet,   { header: 1 });
+
+      //         this.datas = datas;
+      //         console.log(datas, 'datas');
+      //         console.log(this.datas, 'datas2');
+      // console.log(JSON.parse(response.data));
+    },
+    uploadExcel1(files) {
+      // In some cases, you need to use $nextTick
+      // this.$nextTick(() => {})
+      LuckyExcel.transformExcelToLucky(files, function (exportJson, luckysheetfile) {
+        console.log('transformExcelToLucky', files, exportJson);
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+          alert('Failed to read the content of the excel file, currently does not support xls files!');
+          return;
+        }
+        luckysheet.destroy();
+        luckysheet.create({
+          container: 'luckysheet', //luckysheet is the container id
+          showinfobar: false,
+          data: exportJson.sheets,
+          title: exportJson.info.name,
+          userInfo: exportJson.info.name.creator,
+          lang: 'zh', // 设定表格语言
+          showinfobar: false, //是否显示顶部信息栏
+          showtoolbar: false, //是否显示工具栏
+          // showsheetbar: false,//是否显示底部sheet页按钮
+          enableAddRow: false, //允许添加行
+          // 自定义配置底部sheet页按钮
+          showsheetbarConfig: {
+            add: false,
+            menu: false,
+          },
+          //自定义底部sheet页右击菜单
+          sheetRightClickConfig: {
+            delete: false, // 删除
+            copy: false, // 复制
+            rename: false, //重命名
+            color: false, //更改颜色
+            hide: false, //隐藏，取消隐藏
+            move: false, //向左移，向右移
+          },
+          //自定义单元格右键菜单
+          cellRightClickConfig: {
+            copy: false, // 复制
+            copyAs: false, // 复制为
+            paste: false, // 粘贴
+            insertRow: false, // 插入行
+            insertColumn: false, // 插入列
+            deleteRow: false, // 删除选中行
+            deleteColumn: false, // 删除选中列
+            deleteCell: false, // 删除单元格
+            hideRow: false, // 隐藏选中行和显示选中行
+            hideColumn: false, // 隐藏选中列和显示选中列
+            rowHeight: false, // 行高
+            columnWidth: false, // 列宽
+            clear: false, // 清除内容
+            matrix: false, // 矩阵操作选区
+            sort: false, // 排序选区
+            filter: false, // 筛选选区
+            chart: false, // 图表生成
+            image: false, // 插入图片
+            link: false, // 插入链接
+            data: false, // 数据验证
+            cellFormat: false, // 设置单元格格式
+          },
+        });
+      });
+    },
+
     set_form() {
       this.formInline3.name = '';
       this.formInline3.equipment_name = [];
       this.formInline3.is_file = '';
-      this.formInline3.formwork = {};
+      this.formInline3.formwork = null;
     },
     addForm() {
       this.set_form();
       this.flag = 0;
       this.new_visible = true;
       this.options.data = this.set_options;
+      //   this.options.data = [{ data: this.datas  ,name:"第一个" }];
+      //   this.options.data = this.datas;
+      //   this.uploadExcel1(this.file);
+      this.demoHandler2(this.file);
+      // this.uploadExcel1(this.file)
 
       // 初始化表格
-      setTimeout(() => {
-        luckysheet.create(this.options);
-        console.log(luckysheet.getluckysheetfile());
-      }, 100);
+      //   setTimeout(() => {
+      //     // luckysheet.create(this.options);
+      //     luckysheet.create({
+      //         container: 'luckysheet',
+      //     });
+      //     console.log(luckysheet.getluckysheetfile());
+      //   }, 100);
     },
     new_set() {
       this.set_options = [
@@ -485,9 +811,10 @@ export default {
 
       //   return
 
-      exportSheetExcel(luckysheet, `${new_file_name}`);
+      exportSheetExcel_final_blob(luckysheet, `${new_file_name}`);
     },
     demoHandler(x) {
+      console.log(x, '文件099999');
       console.log(x.target.files, '文件11111');
       let upload = document.getElementById('Luckyexcel-demo-file');
       console.log(upload, 'upload');
@@ -535,6 +862,109 @@ export default {
           data: exportJson.sheets,
           title: exportJson.info.name,
           userInfo: exportJson.info.name.creator,
+        });
+      });
+      // });/
+
+      selectADemo.addEventListener('change', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        var name = obj.options[index].innerHTML;
+        if (value == '') {
+          return;
+        }
+        mask.style.display = 'flex';
+        LuckyExcel.transformExcelToLuckyByUrl(value, name, function (exportJson, luckysheetfile) {
+          if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+            alert('Failed to read the content of the excel file, currently does not support xls files!');
+            return;
+          }
+          console.log(exportJson, luckysheetfile);
+          mask.style.display = 'none';
+          window.luckysheet.destroy();
+
+          window.luckysheet.create({
+            container: 'luckysheet', //luckysheet is the container id
+            showinfobar: false,
+            data: exportJson.sheets,
+            title: exportJson.info.name,
+            userInfo: exportJson.info.name.creator,
+          });
+        });
+      });
+
+      downlodDemo.addEventListener('click', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+
+        if (value.length == 0) {
+          alert('Please select a demo file');
+          return;
+        }
+
+        var elemIF = document.getElementById('Lucky-download-frame');
+        if (elemIF == null) {
+          elemIF = document.createElement('iframe');
+          elemIF.style.display = 'none';
+          elemIF.id = 'Lucky-download-frame';
+          document.body.appendChild(elemIF);
+        }
+        elemIF.src = value;
+      });
+      //   }
+    },
+    demoHandler2(x) {
+      console.log(x, '文件099999');
+      // //   console.log(x.target.files, '文件11111');
+      //   let upload = document.getElementById('Luckyexcel-demo-file');
+      //   console.log(upload, 'upload');
+
+      //   let selectADemo = document.getElementById('Luckyexcel-select-demo');
+      //   let downlodDemo = document.getElementById('Luckyexcel-downlod-file');
+      //   let mask = document.getElementById('lucky-mask-demo');
+      //   if (upload) {
+      // upload.addEventListener('change', function (evt) {
+      var files = x;
+      //   var files = evt.target.files;
+      console.log(files, 'wenjian');
+      //   if (files == null || files.length == 0) {
+      //     alert('No files wait for import');
+      //     return;
+      //   }
+
+      //   let name = files.name;
+      //   let suffixArr = name.split('.'),
+      //     suffix = suffixArr[suffixArr.length - 1];
+      //   if (suffix != 'xlsx') {
+      //     alert('Currently only supports the import of xlsx files');
+      //     return;
+      //   }
+      LuckyExcel.transformExcelToLucky(files, function (exportJson, luckysheetfile) {
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+          alert('Failed to read the content of the excel file, currently does not support xls files!');
+          return;
+        }
+        console.log(exportJson, luckysheetfile);
+        // window.luckysheet.destroy();
+
+        // window.luckysheet.create({
+        //   container: 'luckysheet', //luckysheet is the container id
+        //   showinfobar: false,
+        //   data: exportJson.sheets,
+        //   title: exportJson.info.name,
+        //   userInfo: exportJson.info.name.creator,
+        // });
+        luckysheet.destroy();
+
+        luckysheet.create({
+          container: 'luckysheet', //luckysheet is the container id
+          showinfobar: false,
+          data: exportJson.sheets,
+          title: exportJson.info.name,
+          userInfo: exportJson.info.name.creator,
+          lang: 'zh', // 设定表格语言
         });
       });
       // });/
@@ -815,11 +1245,25 @@ export default {
       });
     },
     submitRow2(formName) {
-      console.log('新增导入');
-      this.formInline3.formwork = luckysheet.getAllSheets();
+      console.log('模板导入');
+      exportSheetExcel_final_blob(luckysheet, `模板的名称lds`);
+      console.log(sessionStorage.getItem('final_blob'), 'final_blob');
+      console.log(localStorage.getItem('final_blob'), 'final_bloblocalStorage');
+      let new_blobs = sessionStorage.getItem('final_blob');
+      console.log(new_blobs, 'new_blobs');
+      console.log(this.new_all, 'new_all');
+
+      this.formInline3.formwork = new_blobs;
+      this.formInline3.formwork2 = this.new_all;
+      this.set_axios();
+      return;
+      //   this.sendBlobData()
+      //   return
+      //   this.formInline3.formwork = luckysheet.getAllSheets();
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          // /api/addFormwork
           addFormwork(this.formInline3).then((res) => {
             console.log(res, '0000000000');
             if (res.code == 200) {
@@ -973,5 +1417,13 @@ export default {
   background: #80808085;
   z-index: 9;
   top: 0;
+}
+.lds {
+  width: 100% !important;
+  border: 1px solid red !important;
+  td {
+    border: 1px solid red !important;
+    padding: 2px !important;
+  }
 }
 </style>

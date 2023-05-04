@@ -221,6 +221,7 @@
                 :on-change="handleChange"
                 :on-success="handleAvatarSuccess"
                 auto-upload="true"
+                multiple
                 name="file"
                 :file-list="fileList"
                 :before-upload="beforeAvatarUpload"

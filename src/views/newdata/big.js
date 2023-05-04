@@ -160,6 +160,15 @@ export function putDataInfo(data) {
     });
 }
 
+
+export function getexcel(data) {
+    return request({
+        url: `/api/getexcel`,
+        method: 'post',
+        data: data
+    });
+}
+
 // /api/agency/
 export function new_agency(data) {
     return request({
