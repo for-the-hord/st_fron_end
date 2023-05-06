@@ -24,8 +24,8 @@
               <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin" size="default">
                 <br />
                 <el-form-item prop="username">
-                  <el-input type="text" v-model="formLogin.username" placeholder="手机号">
-                    <i style="color: #fff" slot="prepend" class="el-icon-phone"></i>
+                  <el-input type="text" v-model="formLogin.username" placeholder="账号">
+                    <i style="color: #fff" slot="prepend" class="el-icon-user"></i>
                   </el-input>
                 </el-form-item>
                 <br />

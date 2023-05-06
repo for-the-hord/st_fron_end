@@ -377,12 +377,13 @@ span {
     background: #fff;
 }
 
-.el-select-dropdown__item.hover {
-    background-color: white !important !important;
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+    background: #6bbac6 !important;
 }
 
 .el-select-dropdown__item {
-    color: white !important;
+    color: #fff !important;
 }
 
 .wangpengbg .has-gutter {
