@@ -28,17 +28,15 @@ function exportSheetExcel_final_blob(luckysheet, name) {
     // 4.写入 buffer
     const buffer = workbook.xlsx.writeBuffer().then(data => {
         console.log('data', data)
-            // const blob = new Blob([data], {
-            //     type: 'application/vnd.ms-excel;charset=utf-8'
-            // })
-            // console.log(blob, "导出成功！blob")
-            // final_blob = blob
-            // console.log(final_blob, "导出成功！final_blob")
-            // console.log(axios, 'ssssaxiossssssssssssssssssssssss');
-
-        localStorage.setItem('final_blob', data)
+        const blob = new Blob([data], {
+            type: 'application/vnd.ms-excel;charset=utf-8'
+        })
+        console.log(blob, "导出成功！blob")
         sessionStorage.setItem('final_blob', data)
 
+        //  console.log(axios, 'ssssaxiossssssssssssssssssssssss');
+
+        //lds 这里将二进制流存储
 
         // saveFile(blob, name)
 

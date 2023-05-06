@@ -11,7 +11,7 @@ import store from '@/store/index';
 import router from './router';
 import globalTool from '@/plugin/globalTool.js';
 
-// import { menuHeader, menuAside } from '@/menu'
+import { menuHeader, menuAside } from '@/menu'
 import { frameInRoutes } from '@/router/routes';
 
 import MetaInfo from 'vue-meta-info';
