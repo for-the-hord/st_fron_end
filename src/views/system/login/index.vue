@@ -173,20 +173,20 @@ export default {
         ],
       },
       data_menu: [
-    //   {
-    //       icon: null,
-    //       id: 5,
-    //       mod_order: 0,
-    //       parent_id: 0,
-    //       path: '/index',
-    //       title: '首页',
-    //     },
+      {
+          icon: null,
+          id: 5,
+          mod_order: 0,
+          parent_id: 0,
+          path: '/index',
+          title: '首页',
+        },
         {
           icon: null,
           id: 5,
           mod_order: 1,
           parent_id: 0,
-          path: '/index',
+          path: '/paper',
           title: '数据管理',
         },
         {
@@ -199,7 +199,7 @@ export default {
         },
         {
           icon: null,
-          id: 5,
+           id: 5,
           mod_order: 3,
           parent_id: 0,
           path: '/company',

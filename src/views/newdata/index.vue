@@ -672,7 +672,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.queryData.page_index = val;
-
       this.getFormwork_list2();
     },
 
@@ -949,13 +948,8 @@ export default {
       console.log(formName);
       this.dialogInfo2.visible = false;
     },
-    addRow() {
-      this.visit = 1;
-      this.dialogInfo2.title = '添加试卷';
-      this.dialogInfo2.visible = true;
-      this.initForm();
-      this.isDisabled = false;
-    },
+    
+  
   async  editRow(row) {
       this.flag = 3;
       console.log(row, '111');
@@ -1025,6 +1019,7 @@ export default {
     submitRow1(formName) {
       this.really_file = null;
        this.exportSheetExcel_final_blob_vue(luckysheet, `模板的名称lds`);
+       console.log(luckysheet.getAllSheets())
        setTimeout(() => {   
         console.log( this.really_file,'really_file');
         this.$refs[formName].validate((valid) => {
@@ -1048,7 +1043,7 @@ export default {
             });
         }
       });
-       }, 100); 
+       }, 300); 
  
 
         //  获取表格的数据 转成数据流
@@ -1057,6 +1052,8 @@ export default {
     submitRow2(formName) {
       this.really_file = null;
       this.exportSheetExcel_final_blob_vue(luckysheet, `模板的名称lds`);
+      setTimeout(() => {   
+
         //  获取表格的数据 转成数据流
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -1079,42 +1076,11 @@ export default {
             });
         }
       });
+    }, 300); 
+
 
       return;
-      //    console.log(sessionStorage.getItem('final_blob'), 'sessionStorage');
-      //    this.turn_file = sessionStorage.getItem('files')
-
-      //要是用new window.FormData();不然会报错
-      var formData = new window.FormData();
-      // var file = this.$refs.getAddFile.files[0];
-      // var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-      // if (file != undefined) {
-      formData.append('file', this.turn_file, '新的测试-01');
-      formData.append('name', this.formInline3.name);
-      formData.append('equipment_name', this.formInline3.equipment_name);
-      formData.append('is_file', this.formInline3.is_file);
-      // }
-      axios.post('http://localhost:8080/api/addFormwork', formData, {}).then(function (dat) {
-        console.info(dat.data, 'dddddddddddddd');
-        // 操作成功弹出框
-      });
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // /api/addFormwork
-          //   addFormwork(this.formInline3).then((res) => {
-          //     console.log(res, '0000000000');
-          //     if (res.code == 200) {
-          //       this.$message.success(res.msg);
-          //       luckysheet.destroy();
-          //       this.new_visible = false;
-          //       this.fetch();
-          //     } else {
-          //       this.$message.warning(res.msg);
-          //     }
-          //   });
-        }
-      });
+      
     },
     submitRow3(formName) {
       console.log('新增修改');
@@ -1136,12 +1102,8 @@ export default {
         }
       });
     },
-    beginChange() {
-      this.formInline2.begin_date = this.paperBegin / 1000 || 0;
-    },
-    endChange() {
-      this.formInline2.end_date = this.paperEnd / 1000 || 0;
-    },
+  
+  
     initForm() {
       this.formInline2 = {
         name: '',

@@ -39,7 +39,7 @@
               clearable
               placeholder="请选择装备"
             >
-              <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.id">
+              <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.name">
               </el-option>
             </el-select>
           </el-form-item>
@@ -196,7 +196,7 @@
                 clearable
                 placeholder="请选择装备"
               >
-                <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.id">
+                <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -213,22 +213,20 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
-              <el-radio v-model="formInline4.is_file" label="1">是</el-radio>
-              <el-radio v-model="formInline4.is_file" label="0">否</el-radio>
-            </el-form-item>
 
-            <el-form-item label="上传文件：" v-show="flag == 0">
+            <el-form-item label="上传文件：" v-show="real_is_file == 1">
               <el-upload
                 class="upload-demo"
                 :action="env_url"
                 :on-change="handleChange"
                 :on-success="handleAvatarSuccess"
+                auto-upload="true"
+                multiple
+                name="file"
                 :file-list="fileList"
                 :before-upload="beforeAvatarUpload"
               >
                 <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
               <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
             </el-form-item>
@@ -276,7 +274,7 @@
                 clearable
                 placeholder="请选择装备"
               >
-                <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.id">
+                <el-option v-for="item in options_equipment_name" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -293,27 +291,24 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
-              <el-radio v-model="formInline5.is_file" label="1">是</el-radio>
-              <el-radio v-model="formInline5.is_file" label="0">否</el-radio>
-            </el-form-item>
 
-            <el-form-item label="上传文件：" v-show="flag == 0">
+            <el-form-item label="上传文件：" v-show="real_is_file_data == 1">
               <el-upload
                 class="upload-demo"
                 :action="env_url"
+                auto-upload="true"
                 :on-change="handleChange"
                 :on-success="handleAvatarSuccess"
+                :on-remove="handleRemove"
                 :file-list="fileList"
                 :before-upload="beforeAvatarUpload"
               >
                 <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
               <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
             </el-form-item>
             <el-form-item style="text-align: right !important">
-              <el-button v-show="!realdisabled" type="primary" @click="nexts2('formInline5')">下一步</el-button>
+              <el-button  type="primary" @click="nexts2('formInline5')">下一步</el-button>
             </el-form-item>
 
             <div id="luckysheet2" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
@@ -358,6 +353,7 @@ import {
   getFormworkSearch,
   getEquipmentSearch,
   addDataInfo,
+  delDataInfo,
   putDataInfo,
   getDataInfoItem,
   getFormwork,
@@ -380,6 +376,7 @@ export default {
   },
   data() {
     return {
+      file_name: '',
       env_url: '',
       new_show: true,
       realdisabled: false,
@@ -604,13 +601,17 @@ export default {
       unit_id: '',
       equipment_id: '',
       viewData: null,
+      data_id: '',
+      real_is_file: '',
+      real_is_file_data: '',
+      new_id_list: [],
     };
   },
   created() {
     // let baseURL = process.env.VUE_APP_API;
     //
-    // this.env_url = process.env.VUE_APP_API+'/file/upload';
-    this.env_url = 'http://localhost:8080/file/upload';
+    // this.env_url = process.env.VUE_APP_API + '/api/upload';
+    this.env_url = 'http://localhost:8080/api/upload';
     // http://localhost:8080/
     this.getDataInfo_list();
     this.getU();
@@ -671,7 +672,7 @@ export default {
               },
             },
           ];
-        //   this.options2.data[1].data =[]
+          //   this.options2.data[1].data =[]
           setTimeout(() => {
             luckysheet.create(this.options2);
             console.log(luckysheet.getluckysheetfile());
@@ -686,7 +687,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.realdisabled = true;
-          this.options2.data = this.viewData
+          this.options2.data = this.viewData;
           setTimeout(() => {
             luckysheet.create(this.options2);
             console.log(luckysheet.getluckysheetfile());
@@ -699,12 +700,24 @@ export default {
     handleChange(x) {
       console.log(x, '09xxxxxx');
     },
-    handleAvatarSuccess(x, y, z) {},
-    beforeAvatarUpload(file) {
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+    handleAvatarSuccess(x, y, z) {
+      console.log(x, '当前成功返回');
+      if (x.code == 200) {
+        this.new_id_list.push({
+          id: x.data.id,
+          name: x.data.name,
+        });
+        console.log(this.new_id_list, 'new_id_list');
+      } else {
+        this.$message.error(x.msg);
       }
+    },
+    beforeAvatarUpload(file) {
+      console.log(file, '999');
+
+      //   if (!isLt2M) {
+      //     this.$message.error('上传头像图片大小不能超过 2MB!');
+      //   }
     },
     submitRow5() {
       console.log('新增数据', this.formInline4);
@@ -718,8 +731,8 @@ export default {
         data_info: dataall,
         user_id: new_ids,
         unit_id: this.formInline4.unit_name,
-        equipment_id: this.formInline4.equipment_name,
-        files: [],
+        equipment_name: this.formInline4.equipment_name,
+        files: this.new_id_list,
       };
 
       addDataInfo(new_data).then((res) => {
@@ -727,6 +740,7 @@ export default {
         if (res.code == 200) {
           this.$message.success(res.msg);
           this.new_visible2 = false;
+          this.fetch();
         } else {
           this.$message.warning(res.msg);
         }
@@ -744,8 +758,9 @@ export default {
         data_info: dataall,
         user_id: new_ids,
         unit_id: this.formInline5.unit_name,
-        equipment_id: this.formInline5.equipment_name,
+        equipment_name: this.formInline5.equipment_name,
         files: [],
+        id: this.data_id,
       };
 
       putDataInfo(new_data).then((res) => {
@@ -753,6 +768,8 @@ export default {
         if (res.code == 200) {
           this.$message.success(res.msg);
           this.new_visible2 = false;
+          this.new_visible = false;
+          this.new_visible3 = false;
         } else {
           this.$message.warning(res.msg);
         }
@@ -767,6 +784,7 @@ export default {
       };
       console.log(x, '999999999999999');
       this.form_id = x.id;
+      this.real_is_file = x.is_file;
       this.new_visible2 = true;
       this.dialogInfo2.visible = false;
       this.options2.data[0].data = [];
@@ -797,7 +815,7 @@ export default {
       } else {
         var del_arr = { ids: this.select_arr };
         console.log(del_arr);
-        delFormwork(del_arr).then((res) => {
+        delDataInfo(del_arr).then((res) => {
           console.log(res);
           if (res.code == 200) {
             this.getDataInfo_list();
@@ -930,7 +948,7 @@ export default {
       this.new_visible = false;
       this.new_visible2 = false;
       this.new_visible3 = false;
-      this.realdisabled =false
+      this.realdisabled = false;
       this.$refs['formInline4'].resetFields();
     },
     timeStyle() {
@@ -957,7 +975,7 @@ export default {
       this.queryData.condition = {
         data_info: this.formInline.data_info || '',
         formwork_id: this.formInline.formwork_name,
-        equipment_id: this.formInline.equipment_name,
+        equipment_name: this.formInline.equipment_name,
         unit_id: this.formInline.unit_name,
       };
       this.currentPage_present = 1;
@@ -982,19 +1000,19 @@ export default {
     },
     reset(formName) {
       this.new_visible = false;
-      this.realdisabled=false
+      this.realdisabled = false;
 
       this.$refs[formName].resetFields();
     },
     reset2(formName) {
       this.new_visible2 = false;
-      this.realdisabled=false
+      this.realdisabled = false;
 
       this.$refs[formName].resetFields();
     },
     reset2s(formName) {
       this.new_visible3 = false;
-      this.realdisabled=false
+      this.realdisabled = false;
       this.$refs[formName].resetFields();
     },
 
@@ -1041,6 +1059,8 @@ export default {
       this.flag = 3;
       console.log(row, '111');
       this.new_visible3 = true;
+      this.data_id = row.id;
+      //   this.rea
       this.formInline5.name = row.name;
       this.formInline5.equipment_name = row.equipment_name;
       getDataInfoItem({ id: row.id }).then((res) => {
@@ -1049,10 +1069,16 @@ export default {
         this.formInline5.equipment_name = res.data.equipment_name;
         this.formInline5.unit_name = res.data.unit_name;
         this.viewData = JSON.parse(res.data.data_info);
+        this.real_is_file_data = res.data.is_file;
         console.log(this.viewData, 'viewData');
- 
+        this.fileList = [];
+        res.data.files.map((e) => {
+          this.fileList.push(e);
+        });
+        console.log(this.fileList, 'fileList');
+
       });
-  
+
       //   var new_options = this.options;
       //   var new_formwork = JSON.parse(row.formwork);
       //   var new_arrs = new_formwork.celldata;
@@ -1967,7 +1993,7 @@ export default {
         });
     },
     submitRow1(formName) {
-      console.log('新增模板');
+      console.log('新增数据');
       console.log(this.formInline3);
       console.log(luckysheet.getAllSheets()[0]);
       this.formInline3.formwork = luckysheet.getAllSheets()[0];
@@ -2007,17 +2033,16 @@ export default {
       });
     },
     submitRow3(formName) {
-      console.log('新增导入');
-      this.formInline3.formwork = luckysheet.getAllSheets()[0];
-
+      console.log('新增修改');
+      this.formInline3.formwork = luckysheet.getAllSheets();
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          addFormwork(this.formInline3).then((res) => {
+          putDataInfo(this.formInline3).then((res) => {
             console.log(res, '0000000000');
             if (res.code == 200) {
               this.$message.success(res.msg);
               luckysheet.destroy();
-              this.new_visible = false;
+              this.new_visible2 = false;
             } else {
               this.$message.warning(res.msg);
             }

@@ -17,23 +17,14 @@ const frameIn = [{
         component: layoutHeaderAside,
         children: [
             // 情报大屏
-            // {
-            //     path: 'index',
-            //     name: 'index',
-            //     meta: {
-            //         title: '系统大屏',
-            //         auth: true,
-            //     },
-            //     component: _import('screen/index'),
-            // },
             {
                 path: 'index',
                 name: 'index',
                 meta: {
-                    title: '数据管理',
+                    title: '系统大屏',
                     auth: true,
                 },
-                component: _import('newdata/paper'),
+                component: _import('screen/index'),
             },
 
             // 刷新页面 必须保留
@@ -52,6 +43,8 @@ const frameIn = [{
             },
         ],
     },
+
+
     {
         path: '/system',
         name: '/system',
@@ -108,6 +101,24 @@ const frameIn = [{
                 auth: true,
             },
             component: _import('newdata/index'),
+        }, ],
+    },
+    {
+        path: '/paper',
+        name: '/paper',
+        meta,
+        redirect: {
+            path: '/paper/index',
+        },
+        component: layoutHeaderAside,
+        children: [{
+            path: 'index',
+            name: '/paper/index',
+            meta: {
+                title: '数据管理',
+                auth: true,
+            },
+            component: _import('newdata/paper'),
         }, ],
     },
     {
