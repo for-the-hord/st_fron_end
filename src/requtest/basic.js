@@ -65,10 +65,10 @@ service.interceptors.request.use(
 const that = this;
 service.interceptors.response.use(
     (response) => {
-        // console.log('打印当前', response)
-        // Message.success('当前请求成功')
-        // console.log(response, 'lanjieqi ')
-        // return response.data;
+        console.log('打印当前', response)
+            // Message.success('当前请求成功')
+            // console.log(response, 'lanjieqi ')
+            // return response.data;
         if (response.data.code === 200) {
             return response.data;
         }

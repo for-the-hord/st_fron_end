@@ -89,6 +89,8 @@ module.exports = {
     devServer: {
         publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
         disableHostCheck: process.env.NODE_ENV === 'development',
+        port: 8084,
+        host: "localhost",
         proxy: { //配置跨域
             '/api': {
                 target: baseURL, //  演示环境
