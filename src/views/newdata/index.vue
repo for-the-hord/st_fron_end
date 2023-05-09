@@ -445,11 +445,11 @@ export default {
       console.log(response, 'response');
     },
    async  get_excel(id) {
-        let baseURL = process.env.VUE_APP_API;
+        let baseURL = process.env.VUE_APP_API_proxy;
       //lds   获取流数据转成 luckysheet 可以直接加载的表格
       const all = await axios({
         method: 'post',
-        url: `http://localhost:8084/api/getExcelByFormwork`,
+        url: `${baseURL}`,
         data: { id: id},
         responseType: 'blob',
       });

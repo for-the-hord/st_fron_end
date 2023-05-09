@@ -119,10 +119,10 @@
               <el-input v-model="formInline3.name" placeholder="请输入模板名称" style="width: 80%"></el-input>
             </el-form-item>
             <el-form-item label="装备名称：" prop="equipment_name">
-              <el-input v-model="formInline3.equipment_name" placeholder="请输入模板名称" style="width: 80%"></el-input>
+              <el-input v-model="formInline3.equipment_name" placeholder="请输入装备名称" style="width: 80%"></el-input>
             </el-form-item>
             <el-form-item label="单位名称：" prop="unit_name">
-              <el-input v-model="formInline3.unit_name" placeholder="请输入模板名称" style="width: 80%"></el-input>
+              <el-input v-model="formInline3.unit_name" placeholder="请输入单位名称" style="width: 80%"></el-input>
             </el-form-item>
             <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
               <el-radio v-model="formInline3.is_file" label="1">是</el-radio>
@@ -2374,6 +2374,7 @@ export default {
       //   if (upload) {
       // upload.addEventListener('change', function (evt) {
       var files = x.target.files;
+      this.formInline3.name = files[0].name
       //   var files = evt.target.files;
       console.log(files, 'wenjian');
       if (files == null || files.length == 0) {
@@ -2575,11 +2576,11 @@ export default {
       this.fetch();
     },
     async  get_excel(id) {
-        let baseURL = process.env.VUE_APP_API;
+        let baseURL = process.env.VUE_APP_API_proxy;
       //lds   获取流数据转成 luckysheet 可以直接加载的表格
       const all = await axios({
         method: 'post',
-        url: `http://localhost:8084/api/getExcelByData`,
+        url: `${baseURL}`,
         data: { id: id},
         responseType: 'blob',
       });
