@@ -307,14 +307,14 @@
               </el-upload>
               <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
             </el-form-item>
-            <el-form-item style="text-align: right !important">
+            <!-- <el-form-item style="text-align: right !important">
               <el-button type="primary" @click="nexts2('formInline5')">下一步</el-button>
-            </el-form-item>
+            </el-form-item> -->
 
             <div id="luckysheet2" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
             <br />
 
-            <el-form-item style="text-align: right !important" v-show="realdisabled">
+            <el-form-item style="text-align: right !important" >
               <el-button type="primary" @click="submitRow5s('formInline5')">提交修改</el-button>
 
               <el-button type="primary_test" @click="reset2s('formInline5')">取消</el-button>
@@ -363,8 +363,11 @@ import {
   paperEdit,
   paperCreate,
   paperRevoke,
+  getDataItem
 } from './big';
 import util from '@/plugin/libs/util.js';
+import axios from 'axios';
+
 
 export default {
   name: 'Paper',
@@ -521,6 +524,8 @@ export default {
         equipment_name: '',
         unit_name: '',
         is_file: '',
+        formwork_id:"",
+        id:""
       },
       formInline: {
         data_info: '',
@@ -2144,21 +2149,21 @@ export default {
         }
       });
     },
-    nexts2(formName) {
-      this.new_show = false;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.realdisabled = true;
-          this.options2.data = this.viewData;
-          setTimeout(() => {
-            luckysheet.create(this.options2);
-            console.log(luckysheet.getluckysheetfile());
-          }, 100);
-        } else {
-          this.$message.warning('请提交完整信息');
-        }
-      });
-    },
+    // nexts2(formName) {
+    //   this.new_show = false;
+    //   this.$refs[formName].validate((valid) => {
+    //     if (valid) {
+    //       this.realdisabled = true;
+    //       this.options2.data = this.viewData;
+    //       setTimeout(() => {
+    //         luckysheet.create(this.options2);
+    //         console.log(luckysheet.getluckysheetfile());
+    //       }, 100);
+    //     } else {
+    //       this.$message.warning('请提交完整信息');
+    //     }
+    //   });
+    // },
     handleChange(x) {
       console.log(x, '09xxxxxx');
     },
@@ -2214,7 +2219,7 @@ export default {
       formData.append('user_id', new_ids);
       formData.append('unit_id', this.formInline4.unit_name);
       formData.append('equipment_name', this.formInline4.equipment_name);
-      formData.append('files', this.new_id_list);
+      formData.append('attachment', this.new_id_list);
 
       addDataInfo(formData).then((res) => {
         console.log(res, '0000000000');
@@ -2232,31 +2237,63 @@ export default {
     submitRow5s() {
       console.log('修改数据', this.formInline5);
       let new_ids = util.cookies.get('user_id');
+      this.really_file = null;
 
-      let dataall = luckysheet.getluckysheetfile();
-      console.log(dataall, 'dataall');
-      let new_data = {
-        name: this.formInline5.name,
-        formwork_id: this.form_id,
-        data_info: dataall,
-        user_id: new_ids,
-        unit_id: this.formInline5.unit_name,
-        equipment_name: this.formInline5.equipment_name,
-        files: this.new_id_list==[]? null: this.new_id_list ,
-        id: this.data_id,
-      };
+    //   let dataall = luckysheet.getluckysheetfile();
+    //   console.log(dataall, 'dataall');
+    //   let new_data = {
+    //     name: this.formInline5.name,
+    //     formwork_id: this.form_id,
+    //     data_info: dataall,
+    //     user_id: new_ids,
+    //     unit_id: this.formInline5.unit_name,
+    //     equipment_name: this.formInline5.equipment_name,
+    //     files: this.new_id_list==[]? null: this.new_id_list ,
+    //     id: this.data_id,
+    //   };
 
-      putDataInfo(new_data).then((res) => {
+    //   putDataInfo(new_data).then((res) => {
+    //     console.log(res, '0000000000');
+    //     if (res.code == 200) {
+    //       this.$message.success(res.msg);
+    //       this.new_visible2 = false;
+    //       this.new_visible = false;
+    //       this.new_visible3 = false;
+    //     } else {
+    //       this.$message.warning(res.msg);
+    //     }
+    //   });
+  
+  
+    //要是用new window.FormData();不然会报错
+    
+    this.exportSheetExcel_final_blob_vue(luckysheet, `模板的名称lds`);
+      setTimeout(() => {   
+
+     var formData = new window.FormData();
+      formData.append('file', this.really_file, 'test.xlsx');
+      formData.append('name', this.formInline5.name);
+      formData.append('formwork_id', this.formInline5.formwork_id);
+      formData.append('user_id', new_ids);
+      formData.append('id', this.formInline5.id);
+      formData.append('unit_id', this.formInline5.unit_name);
+      formData.append('equipment_name', this.formInline5.equipment_name);
+      formData.append('attachment', this.new_id_list);
+
+      putDataInfo(formData).then((res) => {
         console.log(res, '0000000000');
         if (res.code == 200) {
           this.$message.success(res.msg);
           this.new_visible2 = false;
+          this.new_visible3= false;
           this.new_visible = false;
-          this.new_visible3 = false;
+          this.fetch();
         } else {
           this.$message.warning(res.msg);
         }
       });
+    }, 300); 
+
     },
     test_s(x) {
       this.formInline4 = {
@@ -2537,6 +2574,181 @@ export default {
       this.formInline.equipment_name = [];
       this.fetch();
     },
+    async  get_excel(id) {
+        let baseURL = process.env.VUE_APP_API;
+      //lds   获取流数据转成 luckysheet 可以直接加载的表格
+      const all = await axios({
+        method: 'post',
+        url: `http://localhost:8084/api/getExcelByData`,
+        data: { id: id},
+        responseType: 'blob',
+      });
+      console.log(all, 'aaaaaaaaaaaaaa');
+      console.log(all.data, 'cccccccccc');
+    //   this.new_all = all.data;
+    //   console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
+    //   var blob = new Blob([all.data], {
+    //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //   });
+    //   this.turn_blob = blob;
+      const file = new window.File(
+        [all.data], // blob
+        'Filename.xlsx',
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      console.log('====file====', file);
+      this.file = file; //this.file 就是二进制 binary了
+      console.log('====file2====', this.file);
+     this.demoHandler3(this.file)
+
+    },
+      // lds 将流数据处理成luckysheet 可以加载的文件格式
+      demoHandler2(x) {
+      console.log(x, '文件099999');
+      var files = x;
+      console.log(files, 'wenjian');
+      LuckyExcel.transformExcelToLucky(files, function (exportJson, luckysheetfile) {
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+          alert('Failed to read the content of the excel file, currently does not support xls files!');
+          return;
+        }
+        console.log(exportJson, luckysheetfile);
+
+        luckysheet.destroy();
+
+        luckysheet.create({
+          container: 'luckysheet', //luckysheet is the container id
+          showinfobar: false,
+          data: exportJson.sheets,
+          title: exportJson.info.name,
+          userInfo: exportJson.info.name.creator,
+          lang: 'zh', // 设定表格语言
+        });
+      });
+      // });/
+
+      selectADemo.addEventListener('change', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        var name = obj.options[index].innerHTML;
+        if (value == '') {
+          return;
+        }
+        mask.style.display = 'flex';
+        LuckyExcel.transformExcelToLuckyByUrl(value, name, function (exportJson, luckysheetfile) {
+          if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+            alert('Failed to read the content of the excel file, currently does not support xls files!');
+            return;
+          }
+          console.log(exportJson, luckysheetfile);
+          mask.style.display = 'none';
+          window.luckysheet.destroy();
+
+          window.luckysheet.create({
+            container: 'luckysheet', //luckysheet is the container id
+            showinfobar: false,
+            data: exportJson.sheets,
+            title: exportJson.info.name,
+            userInfo: exportJson.info.name.creator,
+          });
+        });
+      });
+
+      downlodDemo.addEventListener('click', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+
+        if (value.length == 0) {
+          alert('Please select a demo file');
+          return;
+        }
+
+        var elemIF = document.getElementById('Lucky-download-frame');
+        if (elemIF == null) {
+          elemIF = document.createElement('iframe');
+          elemIF.style.display = 'none';
+          elemIF.id = 'Lucky-download-frame';
+          document.body.appendChild(elemIF);
+        }
+        elemIF.src = value;
+      });
+      //   }
+    },
+      demoHandler3(x) {
+      console.log(x, '文件099999');
+      var files = x;
+      console.log(files, 'wenjian');
+      LuckyExcel.transformExcelToLucky(files, function (exportJson, luckysheetfile) {
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+          alert('Failed to read the content of the excel file, currently does not support xls files!');
+          return;
+        }
+        console.log(exportJson, luckysheetfile);
+
+        luckysheet.destroy();
+
+        luckysheet.create({
+          container: 'luckysheet2', //luckysheet is the container id
+          showinfobar: false,
+          data: exportJson.sheets,
+          title: exportJson.info.name,
+          userInfo: exportJson.info.name.creator,
+          lang: 'zh', // 设定表格语言
+        });
+      });
+      // });/
+
+      selectADemo.addEventListener('change', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        var name = obj.options[index].innerHTML;
+        if (value == '') {
+          return;
+        }
+        mask.style.display = 'flex';
+        LuckyExcel.transformExcelToLuckyByUrl(value, name, function (exportJson, luckysheetfile) {
+          if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+            alert('Failed to read the content of the excel file, currently does not support xls files!');
+            return;
+          }
+          console.log(exportJson, luckysheetfile);
+          mask.style.display = 'none';
+          window.luckysheet.destroy();
+
+          window.luckysheet.create({
+            container: 'luckysheet', //luckysheet is the container id
+            showinfobar: false,
+            data: exportJson.sheets,
+            title: exportJson.info.name,
+            userInfo: exportJson.info.name.creator,
+          });
+        });
+      });
+
+      downlodDemo.addEventListener('click', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+
+        if (value.length == 0) {
+          alert('Please select a demo file');
+          return;
+        }
+
+        var elemIF = document.getElementById('Lucky-download-frame');
+        if (elemIF == null) {
+          elemIF = document.createElement('iframe');
+          elemIF.style.display = 'none';
+          elemIF.id = 'Lucky-download-frame';
+          document.body.appendChild(elemIF);
+        }
+        elemIF.src = value;
+      });
+      //   }
+    },
 
     editRow(row) {
       this.flag = 3;
@@ -2546,33 +2758,27 @@ export default {
       //   this.rea
       this.formInline5.name = row.name;
       this.formInline5.equipment_name = row.equipment_name;
+      this.get_excel(row.id)
+
       getDataInfoItem({ id: row.id }).then((res) => {
         console.log(res, '89089089');
         this.formInline5.name = res.data.name;
         this.formInline5.equipment_name = res.data.equipment_name;
         this.formInline5.unit_name = res.data.unit_name;
+        this.formInline5.formwork_id = res.data.formwork_id;
+        this.formInline5.id = res.data.id;
         this.viewData = JSON.parse(res.data.data_info);
         this.real_is_file_data = res.data.is_file;
         console.log(this.viewData, 'viewData');
         this.fileList = [];
-        res.data.files.map((e) => {
+        res.data.attachment.map((e) => {
           this.fileList.push(e);
         });
         console.log(this.fileList, 'fileList');
       });
+     
 
-      //   var new_options = this.options;
-      //   var new_formwork = JSON.parse(row.formwork);
-      //   var new_arrs = new_formwork.celldata;
-      //   console.log(new_arrs, 'celdat');
-
-      //   new_options.data[0].celldata = new_arrs;
-      //   console.log(new_options);
-      //   // 初始化表格
-      //   setTimeout(() => {
-      //     luckysheet.create(new_options);
-      //     console.log(luckysheet.getluckysheetfile());
-      //   }, 100);
+   
     },
 
     viewRow(row) {
@@ -2679,7 +2885,7 @@ export default {
       formData.append('user_id', new_ids);
       formData.append('unit_id', this.formInline3.unit_name);
       formData.append('equipment_name', this.formInline3.equipment_name);
-      formData.append('files', this.new_id_list==[]? null: this.new_id_list );
+      formData.append('attachment', this.new_id_list==[]? null: this.new_id_list );
  
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -2699,11 +2905,39 @@ export default {
 
     },
     submitRow3(formName) {
-      console.log('新增修改');
-      this.formInline3.formwork = luckysheet.getAllSheets();
+    //   console.log('新增修改');
+    //    this.$refs[formName].validate((valid) => {
+    //     if (valid) {
+    //       putDataInfo(this.formInline3).then((res) => {
+    //         console.log(res, '0000000000');
+    //         if (res.code == 200) {
+    //           this.$message.success(res.msg);
+    //           luckysheet.destroy();
+    //           this.new_visible2 = false;
+    //         } else {
+    //           this.$message.warning(res.msg);
+    //         }
+    //       });
+    //     }
+    //   });
+   
+   
+      this.really_file = null;
+      this.exportSheetExcel_final_blob_vue(luckysheet, `模板的名称lds`);
+      setTimeout(() => {   
+
+      var formData = new window.FormData();
+      formData.append('file', this.really_file, 'test.xlsx');
+      formData.append('name', this.formInline3.name);
+      formData.append('formwork_id', this.form_id);
+      formData.append('user_id', new_ids);
+      formData.append('unit_id', this.formInline3.unit_name);
+      formData.append('equipment_name', this.formInline3.equipment_name);
+      formData.append('attachment', this.new_id_list==[]? null: this.new_id_list );
+ 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          putDataInfo(this.formInline3).then((res) => {
+            putDataInfo(formData).then((res) => {
             console.log(res, '0000000000');
             if (res.code == 200) {
               this.$message.success(res.msg);
@@ -2715,6 +2949,7 @@ export default {
           });
         }
       });
+    }, 300); 
     },
 
     beginChange() {

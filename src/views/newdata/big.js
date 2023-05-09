@@ -17,6 +17,16 @@ export function getFormwork(data) {
     });
 }
 
+//    获取单条数据模板
+export function getDataItem(data) {
+    return request({
+        url: `/api/getExcelByData`,
+        method: 'post',
+        data: data
+    });
+}
+
+
 // /addFormwork 新增
 export function addFormwork(data) {
     return request({

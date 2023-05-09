@@ -369,7 +369,7 @@ export default {
   created() {
     this.getFormwork_list();
 
-    this.getssss();
+    // this.getssss();
     //  getexcel 获取模板的流数据
   },
   methods: {
@@ -449,18 +449,13 @@ export default {
       //lds   获取流数据转成 luckysheet 可以直接加载的表格
       const all = await axios({
         method: 'post',
-        url: `http://localhost:8084/api/getexcel`,
+        url: `http://localhost:8084/api/getExcelByFormwork`,
         data: { id: id},
         responseType: 'blob',
       });
       console.log(all, 'aaaaaaaaaaaaaa');
       console.log(all.data, 'cccccccccc');
-    //   this.new_all = all.data;
-    //   console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
-    //   var blob = new Blob([all.data], {
-    //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    //   });
-    //   this.turn_blob = blob;
+  
       const file = new window.File(
         [all.data], // blob
         'Filename.xlsx',
@@ -473,33 +468,7 @@ export default {
 
     },
 
-    async getssss() {
-      let baseURL = process.env.VUE_APP_API;
-      //lds   获取流数据转成 luckysheet 可以直接加载的表格
-      const all = await axios({
-        method: 'post',
-        url: `http://localhost:8081/api/getexcel`,
-        data: { id: '46901962dd9011ed8aee00163e0072c3' },
-        responseType: 'blob',
-      });
-      console.log(all, 'aaaaaaaaaaaaaa');
-      console.log(all.data, 'cccccccccc');
-      this.new_all = all.data;
-      console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
-      var blob = new Blob([all.data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      this.turn_blob = blob;
-      const file = new window.File(
-        [all.data], // blob
-        'Filename.xlsx',
-        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
-      );
-      console.log('====file====', file);
-      this.file = file; //this.file 就是二进制 binary了
-      console.log('====file2====', this.file);
-      //lds   获取流数据转成 luckysheet 可以直接加载的表格
-    },
+ 
     uploadExcel1(files) {
       // In some cases, you need to use $nextTick
       // this.$nextTick(() => {})
