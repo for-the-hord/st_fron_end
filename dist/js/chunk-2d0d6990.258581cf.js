@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d6990"],{"72dc":function(n,o,p){n.exports=p.p+"fonts/iconfont.111271f1.ttf"}}]);

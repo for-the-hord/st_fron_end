@@ -113,7 +113,7 @@
               <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
             </el-form-item>
             <el-form-item style="text-align: right !important" v-show="flag == 3">
-              <el-button type="primary" @click="submitRow3('formInline3')">提交修改</el-button>
+              <!-- <el-button type="primary" @click="submitRow3('formInline3')">提交修改</el-button> -->
 
               <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
             </el-form-item>
@@ -141,19 +141,7 @@
         <el-form-item label="单位名称：" prop="name">
           <el-input v-model="formInline4.name" placeholder="请输入单位名称" style="width: 80%"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="模板：" prop="template_ids">
-          <el-checkbox-group v-model="formInline4.template_ids">
-            <el-checkbox
-              v-for="(item, key) in body_list"
-              :key="item.id"
-              :label="item.id"
-              name="template_ids"
-              :value="item.id"
-            >
-              {{ item.name }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-form-item> -->
+       
 
       
 
@@ -390,6 +378,7 @@ export default {
       });
       this.select_arr2 = new_arr;
       console.log(this.select_arr2, '弹窗当前选中2');
+      this.formInline4.template_ids = this.select_arr2      
       
     },
     delRow() {
@@ -768,7 +757,6 @@ export default {
     },
     submitRow3(formName) {
       console.log('新增单位');
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
           addUnit(this.formInline4).then((res) => {

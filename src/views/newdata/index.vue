@@ -449,7 +449,7 @@ export default {
       //lds   获取流数据转成 luckysheet 可以直接加载的表格
       const all = await axios({
         method: 'post',
-        url: `${baseURL}`,
+        url: `${baseURL}/api/getExcelByFormwork`,
         data: { id: id},
         responseType: 'blob',
       });

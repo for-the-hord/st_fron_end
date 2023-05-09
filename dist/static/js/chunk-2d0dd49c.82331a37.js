@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0dd49c"],{"816c":function(n,c,o){n.exports=o.p+"static/fonts/HanaleiFill-Regular.8c721263.ttf"}}]);
