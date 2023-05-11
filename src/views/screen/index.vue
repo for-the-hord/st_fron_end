@@ -239,7 +239,7 @@ import maps from './map';
 import vpie from './vpie';
 import vbar from './vbar';
 import { agency, agency2, agency3, exam1, exam2, selects, selects2, new_map} from './big.js';
-
+ 
 export default {
   components: {
     vline,

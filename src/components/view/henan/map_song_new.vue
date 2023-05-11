@@ -224,17 +224,17 @@ export default {
   mounted() {
   },
   created() {
-    new_map().then(res=>{
-      this.cityData = res.data.city_data;
-      this.pointData = res.data.point_data;
-      this.pointData.forEach((item, ind) => {
-        item.value = JSON.parse(item.value);
-        this.pointData[ind] = item
-      })
-      setTimeout(() => {
-          this.initChart()
-        }, 2000)
-    })
+    // new_map().then(res=>{
+    //   this.cityData = res.data.city_data;
+    //   this.pointData = res.data.point_data;
+    //   this.pointData.forEach((item, ind) => {
+    //     item.value = JSON.parse(item.value);
+    //     this.pointData[ind] = item
+    //   })
+    //   setTimeout(() => {
+    //       this.initChart()
+    //     }, 2000)
+    // })
   },
 };
 </script>

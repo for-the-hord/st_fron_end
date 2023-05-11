@@ -494,7 +494,7 @@ export default {
     set_form() {
       this.formInline3.name = '';
       this.formInline3.equipment_name = [];
-      this.formInline3.is_file = '';
+      this.formInline3.is_file = '0';
       this.formInline3.formwork = null;
     },
     addForm() {
