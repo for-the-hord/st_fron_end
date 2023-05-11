@@ -3,7 +3,7 @@
     <el-button class="d2-mr btn-text can-hover" type="text" @click="toggle">
       <!-- <d2-icon v-if="active" name="compress"/>
       <d2-icon v-else name="arrows-alt" style="font-size: 16px"/> -->
-      <img src="/image/AOne/full2.png" alt="">
+      <img src="~@/assets/image/AOne/full2.png" alt="">
     </el-button>
   </el-tooltip>
 </template>

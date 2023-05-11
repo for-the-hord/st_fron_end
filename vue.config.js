@@ -86,9 +86,9 @@ let baseURL = process.env.VUE_APP_API;
 module.exports = {
     publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
     // 输出文件目录
-    outputDir: 'dist',
-    assetsDir: 'static',
-    indexPath: 'index.html',
+    // outputDir: 'dist',
+    // assetsDir: 'static',
+    // indexPath: 'index.html',
     lintOnSave: true,
     devServer: {
         publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',

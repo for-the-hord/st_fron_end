@@ -63,67 +63,7 @@
         <span class="zanwu" style="color: gray"> 暂无数据</span>
       </div>
     </div>
-    <transition name="fade-scale">
-      <div class="new_tan" v-show="new_visible">
-        <div class="new_dio">
-          <i class="el-icon-close new_close" @click="new_close"></i>
-
-          <el-form
-            :model="formInline3"
-            :rules="rules"
-            ref="formInline3"
-            class="demo-form-inline lds_form"
-            label-width="120px"
-          >
-            <el-form-item label="模板名称：" prop="name">
-              <el-input v-model="formInline3.name" placeholder="请输入模板名称" style="width: 80%"></el-input>
-            </el-form-item>
-            <el-form-item label="装备名称：" prop="equipment_name">
-              <el-input v-model="formInline3.equipment_name" placeholder="请输入模板名称" style="width: 80%"></el-input>
-            </el-form-item>
-            <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
-              <el-radio v-model="formInline3.is_file" label="1">是</el-radio>
-              <el-radio v-model="formInline3.is_file" label="0">否</el-radio>
-            </el-form-item>
-
-            <el-form-item label="导入文件：" v-show="flag == 0">
-              <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
-              <input
-                style="font-size: 16px"
-                type="file"
-                id="Luckyexcel-demo-file"
-                class="Luckyexcel-demo-file"
-                name="Luckyexcel-demo-file"
-                @change="demoHandler"
-                value="导入文件"
-              />
-            </el-form-item>
-
-            <div id="luckysheet" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
-            <br />
-
-            <el-form-item style="text-align: right !important" v-show="flag == 1">
-              <el-button type="primary" @click="submitRow1('formInline3')">提交模板</el-button>
-
-              <el-button type="primary_test" @click="resetForm_doudou('formInline3')">取消</el-button>
-            </el-form-item>
-            <el-form-item style="text-align: right !important" v-show="flag == 0">
-              <el-button type="primary" @click="submitRow2('formInline3')">提交导入</el-button>
-
-              <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
-            </el-form-item>
-            <el-form-item style="text-align: right !important" v-show="flag == 3">
-              <!-- <el-button type="primary" @click="submitRow3('formInline3')">提交修改</el-button> -->
-
-              <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
-            </el-form-item>
-            <el-form-item style="text-align: right !important" v-show="flag == 4">
-              <el-button type="primary" icon="" @click="doExport()">导出模板</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-    </transition>
+  
     <qd-dialog
       :title="dialogInfo2.title"
       :visible.sync="dialogInfo2.visible"
@@ -141,54 +81,57 @@
         <el-form-item label="单位名称：" prop="name">
           <el-input v-model="formInline4.name" placeholder="请输入单位名称" style="width: 80%"></el-input>
         </el-form-item>
-       
+        <div class="qd-table" style="position: relative; margin: 0 auto">
+          <el-table
+            v-if="body_list"
+            :data="body_list"
+            style="width: 100%"
+            ref="multipleTable"
+            stripe
+            v-loading="loading"
+            @cell-mouse-enter="hover_table_lds"
+            @row-click="goDetail"
+            :header-cell-style="header_style"
+            :cell-style="body_style"
+            @selection-change="handleSelectionChange2"
+          >
+            <el-table-column type="selection" width="55"> </el-table-column>
+            <el-table-column prop="name" label="模板名称" :cell-style="timeStyle">
+              <template slot-scope="scope">
+                <span style="cursor: pointer"> {{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="操作" :cell-style="timeStyle">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="set_look(scope.row)" icon="el-icon-zoom-in"
+                  >预览</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
 
-      
-
-      <div class="qd-table" style="position: relative; margin: 0 auto">
-        <el-table
-          v-if="body_list"
-          :data="body_list"
-          style="width: 100%"
-          stripe
-          v-loading="loading"
-          @cell-mouse-enter="hover_table_lds"
-          @row-click="goDetail"
-          :header-cell-style="header_style"
-          :cell-style="body_style"
-          @selection-change="handleSelectionChange2"
-        >
-          <el-table-column type="selection" width="55"> </el-table-column>
-          <el-table-column prop="name" label="模板名称" :cell-style="timeStyle">
-            <template slot-scope="scope">
-              <span style="cursor: pointer"> {{ scope.row.name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" label="操作" :cell-style="timeStyle">
-            <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="set_look(scope.row)" icon="el-icon-zoom-in">预览</el-button>
-
-            </template>
-          </el-table-column>
-
-          
-        </el-table>
-      </div>
-
-
-      <el-form-item style="text-align: right !important" v-show="danwei == 1">
+        <div style="text-align: right !important; margin: 20px" v-show="danwei == 1">
           <el-button type="primary" @click="submitRow3('formInline4')">新增单位</el-button>
           <el-button type="primary_test" @click="reset('formInline4')">取消</el-button>
-        </el-form-item>
+        </div>
 
-        <el-form-item style="text-align: right !important" v-show="danwei == 2">
+        <div style="text-align: right !important; margin: 20px" v-show="danwei == 2">
           <el-button type="primary" @click="submitRow4('formInline4')">修改单位</el-button>
           <el-button type="primary_test" @click="reset('formInline4')">取消</el-button>
-        </el-form-item>
+        </div>
       </el-form>
-
-
     </qd-dialog>
+
+    <transition name="fade-scale">
+      <div class="new_tan" v-if="new_visible">
+        <div class="new_dio">
+          <i class="el-icon-close new_close" @click="new_close"></i>
+          <div   id="luckysheet" class="luckysheet-content lucky_doudou" style="height:600px"></div>
+ 
+        </div>
+      </div>
+    </transition>
   </d2-container>
 </template>
 <script>
@@ -207,6 +150,7 @@ import {
   paperEdit,
   paperCreate,
   paperRevoke,
+  getUnitItem,
 } from './big';
 
 export default {
@@ -218,7 +162,7 @@ export default {
     },
   },
   data() {
-    return {
+    return { 
       options: {
         container: 'luckysheet', // 设定DOM容器的id
         title: '数据填报系统表格', // 设定表格名称
@@ -323,7 +267,7 @@ export default {
       },
       body_list: [],
       danwei: '',
-      new_id:""
+      new_id: '',
     };
   },
   created() {
@@ -338,9 +282,119 @@ export default {
       this.body_list = res.data.records;
     });
   },
+  watch: {
+    'dialogInfo2.visible' (value) {
+        console.log(value,'his.dialogInfo2')
+        if(!value){
+            // this.formInline4.unit_name = ''
+            this.formInline4.name = ''
+        }
+     }
+  },
   methods: {
-    set_look(x){
-       console.log(x)
+    async  get_excel(id) {
+        let baseURL = process.env.VUE_APP_API_proxy;
+      //lds   获取流数据转成 luckysheet 可以直接加载的表格
+      const all = await axios({
+        method: 'post',
+        url: `${baseURL}/api/getExcelByFormwork`,
+        data: { id: id},
+        responseType: 'blob',
+      });
+      console.log(all, 'aaaaaaaaaaaaaa');
+      console.log(all.data, 'cccccccccc');
+  
+      const file = new window.File(
+        [all.data], // blob
+        'Filename.xlsx',
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      console.log('====file====', file);
+      this.file = file; //this.file 就是二进制 binary了
+      console.log('====file2====', this.file);
+     this.demoHandler2(this.file)
+
+    },
+     // lds 将流数据处理成luckysheet 可以加载的文件格式
+     demoHandler2(x) {
+      console.log(x, '文件099999');
+      var files = x;
+      console.log(files, 'wenjian');
+      LuckyExcel.transformExcelToLucky(files, function (exportJson, luckysheetfile) {
+        if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+          alert('Failed to read the content of the excel file, currently does not support xls files!');
+          return;
+        }
+        console.log(exportJson, luckysheetfile);
+
+        luckysheet.destroy();
+
+        luckysheet.create({
+          container: 'luckysheet', //luckysheet is the container id
+          showinfobar: false,
+          data: exportJson.sheets,
+          title: exportJson.info.name,
+          userInfo: exportJson.info.name.creator,
+          lang: 'zh', // 设定表格语言
+        });
+      });
+      // });/
+
+      selectADemo.addEventListener('change', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        var name = obj.options[index].innerHTML;
+        if (value == '') {
+          return;
+        }
+        mask.style.display = 'flex';
+        LuckyExcel.transformExcelToLuckyByUrl(value, name, function (exportJson, luckysheetfile) {
+          if (exportJson.sheets == null || exportJson.sheets.length == 0) {
+            alert('Failed to read the content of the excel file, currently does not support xls files!');
+            return;
+          }
+          console.log(exportJson, luckysheetfile);
+          mask.style.display = 'none';
+          window.luckysheet.destroy();
+
+          window.luckysheet.create({
+            container: 'luckysheet', //luckysheet is the container id
+            showinfobar: false,
+            data: exportJson.sheets,
+            title: exportJson.info.name,
+            userInfo: exportJson.info.name.creator,
+          });
+        });
+      });
+
+      downlodDemo.addEventListener('click', function (evt) {
+        var obj = selectADemo;
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+
+        if (value.length == 0) {
+          alert('Please select a demo file');
+          return;
+        }
+
+        var elemIF = document.getElementById('Lucky-download-frame');
+        if (elemIF == null) {
+          elemIF = document.createElement('iframe');
+          elemIF.style.display = 'none';
+          elemIF.id = 'Lucky-download-frame';
+          document.body.appendChild(elemIF);
+        }
+        elemIF.src = value;
+      });
+      //   }
+    },
+    set_look(x) {
+      console.log(x);
+      this.dialogInfo2.visible =false
+      this.new_visible =true
+      this.get_excel(x.id)
+
     },
     getU() {
       getUnitSearch().then((res) => {
@@ -361,6 +415,7 @@ export default {
     addData() {
       this.dialogInfo2.visible = true;
       this.danwei = 1;
+      this.formInline.unit_name = '';
     },
     handleSelectionChange(x) {
       console.log(x, '当前选中');
@@ -378,8 +433,7 @@ export default {
       });
       this.select_arr2 = new_arr;
       console.log(this.select_arr2, '弹窗当前选中2');
-      this.formInline4.template_ids = this.select_arr2      
-      
+      this.formInline4.template_ids = this.select_arr2;
     },
     delRow() {
       if (this.select_arr.length < 1) {
@@ -518,6 +572,7 @@ export default {
     },
     new_close() {
       this.new_visible = false;
+      this.formInline4.name = ''
     },
     timeStyle() {
       return 'text-align:center !important';
@@ -573,6 +628,8 @@ export default {
     },
     reset() {
       this.new_visible = false;
+      this.dialogInfo2.visible = false;
+      this.formInline4.name = '';
     },
     resetForm_doudou() {
       this.new_visible = false;
@@ -621,7 +678,7 @@ export default {
     },
     editRow(row) {
       this.danwei = 2;
-      this.new_id = row.id
+      this.new_id = row.id;
       this.dialogInfo2.visible = true;
       console.log(row, '111');
       this.formInline4.name = row.name;
@@ -632,7 +689,33 @@ export default {
           new_ids.push(e.formwork_id);
         });
       }
-      this.formInline4.template_ids = new_ids;
+      let new_select = [];
+      this.body_list.map((e) => {
+        new_ids.map((ee) => {
+          if (e.id == ee) {
+            new_select.push(e);
+          }
+        });
+      });
+      console.log(new_ids, 'new_ids');
+
+      console.log(new_select, 'toggleSelection');
+      this.toggleSelection(new_select);
+
+      //   回显选中
+        this.formInline4.template_ids = new_ids;
+    },
+    // 在获取企业数据下调用
+    toggleSelection(rows) {
+      this.$nextTick(() => {
+        if (rows) {
+          rows.forEach((row) => {
+            this.$refs.multipleTable.toggleRowSelection(row, true);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      });
     },
 
     viewRow(row) {
@@ -700,7 +783,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true,
       })
-        .then(() => {   
+        .then(() => {
           let ids = { ids: [row.id] };
           delUnit(ids).then((res) => {
             if (res.code == 200) {
@@ -765,7 +848,7 @@ export default {
               this.$message.success(res.msg);
               this.dialogInfo2.visible = false;
               this.$refs['formInline4'].resetFields();
-              this.getUnit_list()
+              this.getUnit_list();
             }
           });
         }
@@ -773,11 +856,11 @@ export default {
     },
     submitRow4(formName) {
       console.log('修改单位');
-      let  query = {
-        name:this.formInline4.name,
-        template_ids:this.formInline4.template_ids,
-        id:this.new_id
-      }
+      let query = {
+        name: this.formInline4.name,
+        template_ids: this.formInline4.template_ids,
+        id: this.new_id,
+      };
       this.$refs[formName].validate((valid) => {
         if (valid) {
           putUnitItem(query).then((res) => {
@@ -786,8 +869,7 @@ export default {
               this.$message.success(res.msg);
               this.dialogInfo2.visible = false;
               this.$refs['formInline4'].resetFields();
-              this.getUnit_list()
-
+              this.getUnit_list();
             }
           });
         }

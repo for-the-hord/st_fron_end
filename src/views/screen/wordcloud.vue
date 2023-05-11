@@ -62,11 +62,11 @@ export default {
   },
   created() {},
   mounted() {
-    getWord().then((res) => {
-      console.log(res, "wordd");
-      this.worddata = res.data;
-      this.initCharts(this.worddata); //调用定义词云图方法
-    });
+    // getWord().then((res) => {
+    //   console.log(res, "wordd");
+    //   this.worddata = res.data;
+    //   this.initCharts(this.worddata); //调用定义词云图方法
+    // });
   },
   methods: {
     //定义词云图并插入容器内

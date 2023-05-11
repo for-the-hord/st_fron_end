@@ -47,9 +47,9 @@ export default {
     };
   },
   created() {
-    top10().then((res) => {
-      this.lists = res.data.data.slice(0, 10);
-    });
+    // top10().then((res) => {
+    //   this.lists = res.data.data.slice(0, 10);
+    // });
   },
   methods: {
     gogogo(x) {

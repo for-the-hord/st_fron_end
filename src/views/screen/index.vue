@@ -335,48 +335,48 @@ export default {
     },
   },
   created() {
-    new_map().then(res=>{
-        this.biaotou.agency_num = res.data.agency_num
-        this.biaotou.security_user_num = res.data.security_user_num
-        this.biaotou.user_num = res.data.user_num
-    })
-    // 机构评测
-    agency().then((res) => {
-      this.person_list.map((e, index1) => {
-        res.data.map((ee, index2) => {
-          if (index1 == index2) {
-            e.num = ee.value;
-          }
-        });
-      });
-    });
-    // 机构评测
-    agency2().then((res) => {
-      this.table_list = res.data.slice(0, 5);
-    });
-    agency3().then((res) => {
-      this.industry = res.data;
-      this.top1 = res.data.top1.name;
-      if(res.data){
-      this.zhen = true;
-      }else{
-      this.zhen = false;
+//     new_map().then(res=>{
+//         this.biaotou.agency_num = res.data.agency_num
+//         this.biaotou.security_user_num = res.data.security_user_num
+//         this.biaotou.user_num = res.data.user_num
+//     })
+//     // 机构评测
+//     agency().then((res) => {
+//       this.person_list.map((e, index1) => {
+//         res.data.map((ee, index2) => {
+//           if (index1 == index2) {
+//             e.num = ee.value;
+//           }
+//         });
+//       });
+//     });
+//     // 机构评测
+//     agency2().then((res) => {
+//       this.table_list = res.data.slice(0, 5);
+//     });
+//     agency3().then((res) => {
+//       this.industry = res.data;
+//       this.top1 = res.data.top1.name;
+//       if(res.data){
+//       this.zhen = true;
+//       }else{
+//       this.zhen = false;
 
-      }
-    });
-    exam1().then((res) => {
-      this.exam = res.data;
-    });
-    exam2().then((res) => {
-      this.table_list2 = res.data;
-    });
-    selects().then((res) => {
-      if (res.data.length > 0) {
-        this.sandian_value = res.data[0].id;
-        this.sandian();
-      }
-      this.sandian_select = res.data;
-    });
+//       }
+//     });
+//     exam1().then((res) => {
+//       this.exam = res.data;
+//     });
+//     exam2().then((res) => {
+//       this.table_list2 = res.data;
+//     });
+//     selects().then((res) => {
+//       if (res.data.length > 0) {
+//         this.sandian_value = res.data[0].id;
+//         this.sandian();
+//       }
+//       this.sandian_select = res.data;
+//     });
   },
   methods: {
     sandian() {

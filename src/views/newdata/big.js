@@ -17,6 +17,18 @@ export function getFormwork(data) {
     });
 }
 
+
+// getUnitItem  获取单位
+
+export function getUnitItem(data) {
+    return request({
+        url: `/api/getUnitItem`,
+        method: 'post',
+        data: data
+    });
+}
+
+
 //    获取单条数据模板
 export function getDataItem(data) {
     return request({

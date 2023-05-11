@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c4a17"],{"3c3d":function(c,n,o){c.exports=o.p+"fonts/Pacifico-Regular.324944d6.ttf"}}]);

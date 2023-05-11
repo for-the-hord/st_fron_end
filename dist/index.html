@@ -1,159 +1,113 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" name="viewport"><script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script><link href="//at.alicdn.com/t/c/font_3596781_vhbn1497p2q.css"><link rel="stylesheet" href="./luckysheet/plugins/css/pluginsCss.css"><link rel="stylesheet" href="./luckysheet/plugins.css"><link rel="stylesheet" href="./luckysheet/css/luckysheet.css"><link rel="stylesheet" href="./luckysheet/assets/iconfont/iconfont.css"><script src="./luckysheet/plugins/js/plugin.js"></script><script src="./luckysheet/luckysheet.umd.js"></script><script src="./luckysheet/Sortable/Sortable.min.js"></script><script src="./luckysheet/js/luckyexcel.umd.js"></script><script src="./luckysheet/exceljs/exceljs.bare.js"></script><script src="./luckysheet/js/excelutils.js"></script><script src="./luckysheet/js/excelutils__data_stream.js"></script><title>填报系统</title><style>html,
+                body,
+                #app {
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                    width: 100%;
+                }
+                
+                .d2-home {
+                    background-color: #303133;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .d2-home__main {
+                    user-select: none;
+                    width: 100%;
+                    flex-grow: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                }
+                
+                .d2-home__footer {
+                    width: 100%;
+                    flex-grow: 0;
+                    text-align: center;
+                    padding: 1em 0;
+                }
+                
+                .d2-home__footer>a {
+                    font-size: 12px;
+                    color: #ABABAB;
+                    text-decoration: none;
+                }
+                
+                .d2-home__loading {
+                    height: 32px;
+                    width: 32px;
+                    margin-bottom: 20px;
+                }</style><script>// document.onkeydown = function () {
+                //     var e = window.event || arguments[0];
+                //     if (e.keyCode == 123) {
+                //         // alert("F12被禁用");
+                //         return false;
+                //     }
+                // }
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" name="viewport">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link href="//at.alicdn.com/t/c/font_3596781_vhbn1497p2q.css">
-    <link rel="stylesheet" href="./luckysheet/plugins/css/pluginsCss.css">
-    <link rel="stylesheet" href="./luckysheet/plugins.css">
-    <link rel="stylesheet" href="./luckysheet/css/luckysheet.css">
-    <link rel="stylesheet" href="./luckysheet/assets/iconfont/iconfont.css">
-    <script src="./luckysheet/plugins/js/plugin.js"></script>
-    <script src="./luckysheet/luckysheet.umd.js"></script>
-    <script src="./luckysheet/Sortable/Sortable.min.js"></script>
-    <script src="./luckysheet/js/luckyexcel.umd.js"></script>
-    <script src="./luckysheet/exceljs/exceljs.bare.js"></script>
-    <script src="./luckysheet/js/excelutils.js"></script>
-    <script src="./luckysheet/js/excelutils__data_stream.js"></script>
-    <title>填报系统</title>
-    <style>
-        html,
-        body,
-        #app {
-            height: 100%;
-            margin: 0px;
-            padding: 0px;
-            width: 100%;
-        }
-        
-        .d2-home {
-            background-color: #303133;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .d2-home__main {
-            user-select: none;
-            width: 100%;
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        
-        .d2-home__footer {
-            width: 100%;
-            flex-grow: 0;
-            text-align: center;
-            padding: 1em 0;
-        }
-        
-        .d2-home__footer>a {
-            font-size: 12px;
-            color: #ABABAB;
-            text-decoration: none;
-        }
-        
-        .d2-home__loading {
-            height: 32px;
-            width: 32px;
-            margin-bottom: 20px;
-        }
-    </style>
-    <script>
-        // document.onkeydown = function () {
-        //     var e = window.event || arguments[0];
-        //     if (e.keyCode == 123) {
-        //         // alert("F12被禁用");
-        //         return false;
-        //     }
-        // }
-
-        // document.oncontextmenu = function () {
-        //     // alert('右键被禁用');
-        //     return false;
-        // }
+                // document.oncontextmenu = function () {
+                //     // alert('右键被禁用');
+                //     return false;
+                // }
 
 
-        document.addEventListener('keydown', function(event) {
-            if ((event.ctrlKey === true || event.metaKey === true) &&
-                (event.which === 61 || event.which === 107 ||
-                    event.which === 173 || event.which === 109 ||
-                    event.which === 187 || event.which === 189)) {
-                event.preventDefault();
-            }
-        }, false);
-        // Chrome IE 360
-        window.addEventListener('mousewheel', function(event) {
-            if (event.ctrlKey === true || event.metaKey) {
-                event.preventDefault();
-            }
-        }, {
-            passive: false
-        });
-
-        //firefox
-        window.addEventListener('DOMMouseScroll', function(event) {
-            if (event.ctrlKey === true || event.metaKey) {
-                event.preventDefault();
-            }
-        }, {
-            passive: false
-        });
-
-
-
-
-        window.onload = function() {
-            document.addEventListener(
-                "keydown",
-                function(event) {
-                    if (
-                        (event.ctrlKey === true || event.metaKey === true) &&
-                        (event.which === 61 ||
-                            event.which === 107 ||
-                            event.which === 173 ||
-                            event.which === 109 ||
-                            event.which === 187 ||
-                            event.which === 189)
-                    ) {
+                document.addEventListener('keydown', function(event) {
+                    if ((event.ctrlKey === true || event.metaKey === true) &&
+                        (event.which === 61 || event.which === 107 ||
+                            event.which === 173 || event.which === 109 ||
+                            event.which === 187 || event.which === 189)) {
                         event.preventDefault();
                     }
-                },
-                false
-            );
-        };
-        var _hmt = _hmt || [];
-        var hmid = "bc38887aa5588add05a38704342ad7e8";
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?" + hmid;
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
-    <link href="/static/css/chunk-vendor.5defc8f0.css" rel="stylesheet">
-    <link href="/static/css/index.770d3499.css" rel="stylesheet">
-</head>
+                }, false);
+                // Chrome IE 360
+                window.addEventListener('mousewheel', function(event) {
+                    if (event.ctrlKey === true || event.metaKey) {
+                        event.preventDefault();
+                    }
+                }, {
+                    passive: false
+                });
 
-<body><noscript><strong>Sorry, D2Admin will not work properly without JavaScript support. Enable JavaScript for browsers and continue.</strong></noscript>
-    <div id="app">
-        <div class="d2-home">
-            <div class="d2-home__main"><img class="d2-home__loading" src="./image/loading/loading-spin.svg" alt="loading"></div>
-            <div class="d2-home__footer">
-                <a target="_blank"></a>
-            </div>
-        </div>
-    </div>
-    <script src="/static/js/manifest.6b35b42a.js"></script>
-    <script src="/static/js/chunk-vendor.19997dfc.js"></script>
-    <script src="/static/js/index.796ce071.js"></script>
-</body>
+                //firefox
+                window.addEventListener('DOMMouseScroll', function(event) {
+                    if (event.ctrlKey === true || event.metaKey) {
+                        event.preventDefault();
+                    }
+                }, {
+                    passive: false
+                });
 
-</html>
+
+
+
+                window.onload = function() {
+                    document.addEventListener(
+                        "keydown",
+                        function(event) {
+                            if (
+                                (event.ctrlKey === true || event.metaKey === true) &&
+                                (event.which === 61 ||
+                                    event.which === 107 ||
+                                    event.which === 173 ||
+                                    event.which === 109 ||
+                                    event.which === 187 ||
+                                    event.which === 189)
+                            ) {
+                                event.preventDefault();
+                            }
+                        },
+                        false
+                    );
+                };
+                var _hmt = _hmt || [];
+                var hmid = "bc38887aa5588add05a38704342ad7e8";
+                (function() {
+                    var hm = document.createElement("script");
+                    hm.src = "https://hm.baidu.com/hm.js?" + hmid;
+                    var s = document.getElementsByTagName("script")[0];
+                    s.parentNode.insertBefore(hm, s);
+                })();</script><link href="/css/chunk-vendor.87dc8625.css" rel="stylesheet"><link href="/css/index.12bcbdef.css" rel="stylesheet"></head><body><noscript><strong>Sorry, D2Admin will not work properly without JavaScript support. Enable JavaScript for browsers and continue.</strong></noscript><div id="app"><div class="d2-home"><div class="d2-home__main"><img class="d2-home__loading" src="./image/loading/loading-spin.svg" alt="loading"></div><div class="d2-home__footer"><a target="_blank"></a></div></div></div><script src="/js/manifest.5961f6ff.js"></script><script src="/js/chunk-vendor.f8b7d9f9.js"></script><script src="/js/index.7f8345ea.js"></script></body></html>

@@ -10,7 +10,7 @@
           <!-- <img class="topbg" src="/image/AOne/top.png" /> -->
           <div class="smind_left">
             <!-- <video class="v_video" loop="loop" autoplay="autoplay" muted="true"> -->
-            <img class="v_video" src="/image/AOne/f.png" />
+            <img class="v_video" src="@/assets/image/AOne/f.png" />
             <!-- </video> -->
           </div>
           <div class="page-login--form">
@@ -403,7 +403,7 @@ export default {
 .page-login {
   @extend %unable-select;
   //   $backgroundColor: #020c22;
-  background: url('/image/AOne/login.png') no-repeat;
+//   background: url('/image/AOne/login.png') no-repeat;
   // ---
   //   background-color: $backgroundColor;
   //   background-color: #0C141C;
@@ -457,7 +457,8 @@ export default {
     position: absolute;
     right: 20%;
     top: 25%;
-    background-image: url('/image/AOne/welcome.png');
+   background-image: url('~@/assets/image/AOne/welcome.png');
+
     background-size: 100% 100%;
     // 卡片
     .el-card {
@@ -680,7 +681,7 @@ export default {
   // height: 50px;
 }
 .el-card__body {
-  background-image: url(/image/AOne/welcome.png);
+//   background-image: url('../../../assets/image/AOne/welcome.png');
 }
 input::-webkit-input-placeholder {
   color: #bac4d0ff !important;

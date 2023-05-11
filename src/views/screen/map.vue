@@ -675,7 +675,7 @@ export default {
 
   mounted() {
     this.clientwidth_lds = document.body.clientWidth;
-    this.gomap();
+    // this.gomap();
     window.addEventListener("resize", () => {
       //   this.changepoint = [];
       //   this.chinaConfigure(this.value);
@@ -754,10 +754,10 @@ export default {
         };
         let newid = params.data.id;
         console.log(abc, "abcccccccccccccccccccc");
-        setnewmap(abc, newid).then((res) => {
-          console.log(res, "redddddddd");
-          this.$emit("hangmap", res.data);
-        });
+        // setnewmap(abc, newid).then((res) => {
+        //   console.log(res, "redddddddd");
+        //   this.$emit("hangmap", res.data);
+        // });
       });
 
       // chart.convertToPixel('geo',[116.0815,41.781])；经纬度坐标+++++++++++++++++++++++++转化窗口坐标方法

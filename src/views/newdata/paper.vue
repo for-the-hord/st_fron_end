@@ -4,7 +4,7 @@
       <div class="jigou">
         <el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline">
           <el-form-item label="搜索内容：" prop="data_info">
-            <el-input v-model="formInline.data_info" clearable placeholder="请输入"></el-input>
+            <el-input @keyup.enter.native="fetch()" v-model="formInline.data_info" clearable placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="选择单位：">
             <el-select
@@ -15,7 +15,7 @@
               clearable
               placeholder="请选择单位"
             >
-              <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.id">
+              <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.name">
               </el-option>
             </el-select>
           </el-form-item>
@@ -112,23 +112,9 @@
     <transition name="fade-scale">
       <div class="new_tan" v-show="new_visible">
         <div class="new_dio">
-          <i class="el-icon-close new_close" @click="new_close"></i>
+          <i class="el-icon-close new_close" @click="new_close3('formInline3')"></i>
 
           <el-form :model="formInline3" ref="formInline3" class="demo-form-inline lds_form" label-width="120px">
-            <el-form-item label="模板名称：" prop="name">
-              <el-input v-model="formInline3.name" placeholder="请输入模板名称" style="width: 80%"></el-input>
-            </el-form-item>
-            <el-form-item label="装备名称：" prop="equipment_name">
-              <el-input v-model="formInline3.equipment_name" placeholder="请输入装备名称" style="width: 80%"></el-input>
-            </el-form-item>
-            <el-form-item label="单位名称：" prop="unit_name">
-              <el-input v-model="formInline3.unit_name" placeholder="请输入单位名称" style="width: 80%"></el-input>
-            </el-form-item>
-            <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
-              <el-radio v-model="formInline3.is_file" label="1">是</el-radio>
-              <el-radio v-model="formInline3.is_file" label="0">否</el-radio>
-            </el-form-item>
-
             <el-form-item label="导入文件：" v-show="flag == 0">
               <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
               <input
@@ -141,6 +127,21 @@
                 value="上传文件"
               />
             </el-form-item>
+            <el-form-item label="模板名称：" prop="name">
+              <el-input readonly="" v-model="formInline3.name" placeholder="请导入模板将自动填充" style="width: 80%"></el-input>
+            </el-form-item>
+            <el-form-item label="装备名称：" prop="equipment_name">
+              <el-input v-model="formInline3.equipment_name" placeholder="请输入装备名称" style="width: 80%"></el-input>
+            </el-form-item>
+            <el-form-item label="单位名称：" prop="unit_name">
+              <el-input v-model="formInline3.unit_name" placeholder="请输入单位名称" style="width: 80%"></el-input>
+            </el-form-item>
+            <el-form-item label="是否上传文件：" prop="is_file" v-if="flag == 1">
+              <el-radio v-model="formInline3.is_file" label="1">是</el-radio>
+              <el-radio v-model="formInline3.is_file" label="0">否</el-radio>
+            </el-form-item>
+
+           
 
             <div id="luckysheet" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
             <br />
@@ -149,7 +150,7 @@
             <el-form-item style="text-align: right !important" v-show="flag == 1">
               <el-button type="primary" @click="submitRow1('formInline3')">提交模板</el-button>
 
-              <el-button type="primary_test" @click="resetForm_doudou('formInline3')">取消</el-button>
+              <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
             </el-form-item>
             <el-form-item style="text-align: right !important" v-show="flag == 0">
               <el-button type="primary" @click="submitRow2('formInline3')">提交导入</el-button>
@@ -162,7 +163,7 @@
               <el-button type="primary_test" @click="reset('formInline3')">取消</el-button>
             </el-form-item>
             <el-form-item style="text-align: right !important" v-show="flag == 4">
-              <el-button type="primary" icon="" @click="doExport()">导出模板</el-button>
+              <el-button type="primary" icon="" @click="doExport()">导出数据</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -171,7 +172,7 @@
     <transition name="fade-scale">
       <div class="new_tan" v-if="new_visible2">
         <div class="new_dio">
-          <i class="el-icon-close new_close" @click="new_close"></i>
+          <i class="el-icon-close new_close" @click="new_close4('formInline4')"></i>
 
           <el-form
             :model="formInline4"
@@ -209,7 +210,7 @@
                 clearable
                 placeholder="请选择单位"
               >
-                <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.id">
+                <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -249,7 +250,7 @@
     <transition name="fade-scale">
       <div class="new_tan" v-if="new_visible3">
         <div class="new_dio">
-          <i class="el-icon-close new_close" @click="new_close"></i>
+          <i class="el-icon-close new_close" @click="new_close5('formInline5')"></i>
 
           <el-form
             :model="formInline5"
@@ -287,7 +288,7 @@
                 clearable
                 placeholder="请选择单位"
               >
-                <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.id">
+                <el-option v-for="item in options_unit_name" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -305,11 +306,8 @@
               >
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
-              <!-- <el-button type="primary" icon="" @click="doExport()">导出文件</el-button> -->
-            </el-form-item>
-            <!-- <el-form-item style="text-align: right !important">
-              <el-button type="primary" @click="nexts2('formInline5')">下一步</el-button>
-            </el-form-item> -->
+             </el-form-item>
+          
 
             <div id="luckysheet2" class="luckysheet-content lucky_doudou" style="height: 400px"></div>
             <br />
@@ -1984,7 +1982,7 @@ export default {
           cellArr.forEach(function (row, rowid) {
             const dbrow = worksheet.getRow(rowid + 1);
             //设置单元格行高,默认乘以1.2倍
-            dbrow.height = luckysheet.getRowHeight([rowid])[rowid] * 1.2;
+            dbrow.height = luckysheet.getRowHeight([rowid])[rowid] * 0.8;
             row.every(function (cell, columnid) {
               if (!cell) return true;
               if (rowid == 0) {
@@ -2140,10 +2138,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.realdisabled = true;
-          setTimeout(() => {
-            luckysheet.create(this.options2);
-            console.log(luckysheet.getluckysheetfile());
-          }, 100);
+          this.get_excel4(this.form_id)
         } else {
           this.$message.warning('请提交完整信息');
         }
@@ -2217,7 +2212,7 @@ export default {
       formData.append('name', this.formInline4.name);
       formData.append('formwork_id', this.form_id);
       formData.append('user_id', new_ids);
-      formData.append('unit_id', this.formInline4.unit_name);
+      formData.append('unit_name', this.formInline4.unit_name);
       formData.append('equipment_name', this.formInline4.equipment_name);
       formData.append('attachment', this.new_id_list);
 
@@ -2276,7 +2271,7 @@ export default {
       formData.append('formwork_id', this.formInline5.formwork_id);
       formData.append('user_id', new_ids);
       formData.append('id', this.formInline5.id);
-      formData.append('unit_id', this.formInline5.unit_name);
+      formData.append('unit_name', this.formInline5.unit_name);
       formData.append('equipment_name', this.formInline5.equipment_name);
       formData.append('attachment', this.new_id_list);
 
@@ -2374,7 +2369,11 @@ export default {
       //   if (upload) {
       // upload.addEventListener('change', function (evt) {
       var files = x.target.files;
-      this.formInline3.name = files[0].name
+      let abc = files[0].name.split('.')
+      this.formInline3.name = abc[0]
+
+      console.log(abc)
+    //   return
       //   var files = evt.target.files;
       console.log(files, 'wenjian');
       if (files == null || files.length == 0) {
@@ -2386,8 +2385,12 @@ export default {
       let suffixArr = name.split('.'),
         suffix = suffixArr[suffixArr.length - 1];
       if (suffix != 'xlsx') {
-        alert('Currently only supports the import of xlsx files');
-        return;
+        alert('请上传格式为xlsx的文件');
+        this.new_visible=false
+        this.new_close3()
+        this.new_close4()
+        this.new_close5()
+        // return;
       }
       LuckyExcel.transformExcelToLucky(files[0], function (exportJson, luckysheetfile) {
         if (exportJson.sheets == null || exportJson.sheets.length == 0) {
@@ -2465,13 +2468,39 @@ export default {
       });
       //   }
     },
-    new_close() {
+    set_key(form){
+        for (let i in form){
+        console.log('属性名为:',i)
+        console.log('值为:',form[i])
+        form[i]=''
+    }
+    },
+    new_close3() {
       this.new_visible = false;
       this.new_visible2 = false;
       this.new_visible3 = false;
       this.realdisabled = false;
-      this.$refs['formInline4'].resetFields();
-    },
+    //   this.$refs[form].resetFields();
+    this.set_key(this.formInline3)
+     },
+     new_close4() {
+      this.new_visible = false;
+      this.new_visible2 = false;
+      this.new_visible3 = false;
+      this.realdisabled = false;
+    //   this.$refs[form].resetFields();
+    this.set_key(this.formInline4)
+
+     },
+     new_close5() {
+      this.new_visible = false;
+      this.new_visible2 = false;
+      this.new_visible3 = false;
+      this.realdisabled = false;
+    //   this.$refs[form].resetFields();
+    this.set_key(this.formInline5)
+
+     },
     timeStyle() {
       return 'text-align:center !important';
     },
@@ -2497,7 +2526,7 @@ export default {
         data_info: this.formInline.data_info || '',
         formwork_id: this.formInline.formwork_name,
         equipment_name: this.formInline.equipment_name,
-        unit_id: this.formInline.unit_name,
+        unit_name: this.formInline.unit_name,
       };
       this.currentPage_present = 1;
       getDataInfo(this.queryData).then((res) => {
@@ -2521,19 +2550,24 @@ export default {
     },
     reset(formName) {
       this.new_visible = false;
+      this.new_visible2 = false;
+      this.new_visible3 = false;
+
       this.realdisabled = false;
 
       this.$refs[formName].resetFields();
     },
     reset2(formName) {
+        this.new_visible = false;
       this.new_visible2 = false;
-      this.realdisabled = false;
+      this.new_visible3 = false;      this.realdisabled = false;
 
       this.$refs[formName].resetFields();
     },
     reset2s(formName) {
-      this.new_visible3 = false;
-      this.realdisabled = false;
+        this.new_visible = false;
+      this.new_visible2 = false;
+      this.new_visible3 = false;      this.realdisabled = false;
       this.$refs[formName].resetFields();
     },
 
@@ -2575,7 +2609,7 @@ export default {
       this.formInline.equipment_name = [];
       this.fetch();
     },
-    async  get_excel(id) {
+    async  get_excel3(id) {
         let baseURL = process.env.VUE_APP_API_proxy;
       //lds   获取流数据转成 luckysheet 可以直接加载的表格
       const all = await axios({
@@ -2601,6 +2635,62 @@ export default {
       this.file = file; //this.file 就是二进制 binary了
       console.log('====file2====', this.file);
      this.demoHandler3(this.file)
+
+    },
+    async  get_excel4(id) {
+        let baseURL = process.env.VUE_APP_API_proxy;
+      //lds   获取流数据转成 luckysheet 可以直接加载的表格
+      const all = await axios({
+        method: 'post',
+        url: `${baseURL}/api/getExcelByFormwork`,
+        data: { id: id},
+        responseType: 'blob',
+      });
+      console.log(all, 'aaaaaaaaaaaaaa');
+      console.log(all.data, 'cccccccccc');
+    //   this.new_all = all.data;
+    //   console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
+    //   var blob = new Blob([all.data], {
+    //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //   });
+    //   this.turn_blob = blob;
+      const file = new window.File(
+        [all.data], // blob
+        'Filename.xlsx',
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      console.log('====file====', file);
+      this.file = file; //this.file 就是二进制 binary了
+      console.log('====file2====', this.file);
+     this.demoHandler3(this.file)
+
+    },
+    async  get_excel2(id) {
+        let baseURL = process.env.VUE_APP_API_proxy;
+      //lds   获取流数据转成 luckysheet 可以直接加载的表格
+      const all = await axios({
+        method: 'post',
+        url: `${baseURL}/api/getExcelByData`,
+        data: { id: id},
+        responseType: 'blob',
+      });
+      console.log(all, 'aaaaaaaaaaaaaa');
+      console.log(all.data, 'cccccccccc');
+    //   this.new_all = all.data;
+    //   console.log(this.new_all, 'nbbbbbbbbbbbbbbbb');
+    //   var blob = new Blob([all.data], {
+    //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //   });
+    //   this.turn_blob = blob;
+      const file = new window.File(
+        [all.data], // blob
+        'Filename.xlsx',
+        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+      );
+      console.log('====file====', file);
+      this.file = file; //this.file 就是二进制 binary了
+      console.log('====file2====', this.file);
+     this.demoHandler2(this.file)
 
     },
       // lds 将流数据处理成luckysheet 可以加载的文件格式
@@ -2759,7 +2849,6 @@ export default {
       //   this.rea
       this.formInline5.name = row.name;
       this.formInline5.equipment_name = row.equipment_name;
-      this.get_excel(row.id)
 
       getDataInfoItem({ id: row.id }).then((res) => {
         console.log(res, '89089089');
@@ -2777,9 +2866,8 @@ export default {
         });
         console.log(this.fileList, 'fileList');
       });
-     
 
-   
+      this.get_excel3(row.id)
     },
 
     viewRow(row) {
@@ -2792,14 +2880,10 @@ export default {
         this.formInline3.unit_name = res.data.unit_name;
         this.viewData = JSON.parse(res.data.data_info);
         console.log(this.viewData, 'viewData');
- 
-        
-
-        setTimeout(() => {
-        //   luckysheet.create(this.options3_view);
-        //   console.log(luckysheet.getluckysheetfile());
-        }, 100);
       });
+
+     this.get_excel2(row.id)
+
     },
     updateRow(row) {
       // 跳转试卷题目选择页
@@ -2838,7 +2922,7 @@ export default {
       })
         .then(() => {
           let ids = { ids: [row.id] };
-          delFormwork(ids).then((res) => {
+          delDataInfo(ids).then((res) => {
             if (res.code == 200) {
               this.$message.success('操作成功');
               this.getDataInfo_list();
@@ -2884,18 +2968,23 @@ export default {
       formData.append('name', this.formInline3.name);
       formData.append('formwork_id', this.form_id);
       formData.append('user_id', new_ids);
-      formData.append('unit_id', this.formInline3.unit_name);
+      formData.append('unit_name', this.formInline3.unit_name);
       formData.append('equipment_name', this.formInline3.equipment_name);
       formData.append('attachment', this.new_id_list==[]? null: this.new_id_list );
  
       this.$refs[formName].validate((valid) => {
         if (valid) {
-            addDataInfo(this.formInline3).then((res) => {
+            addDataInfo(formData).then((res) => {
             console.log(res, '0000000000');
             if (res.code == 200) {
               this.$message.success(res.msg);
               luckysheet.destroy();
               this.new_visible = false;
+              this.getDataInfo_list();
+              this.new_close3()
+              this.new_close4()
+              this.new_close5()
+              
             } else {
               this.$message.warning(res.msg);
             }
@@ -2932,7 +3021,7 @@ export default {
       formData.append('name', this.formInline3.name);
       formData.append('formwork_id', this.form_id);
       formData.append('user_id', new_ids);
-      formData.append('unit_id', this.formInline3.unit_name);
+      formData.append('unit_name', this.formInline3.unit_name);
       formData.append('equipment_name', this.formInline3.equipment_name);
       formData.append('attachment', this.new_id_list==[]? null: this.new_id_list );
  

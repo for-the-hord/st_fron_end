@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0cf912"],{"63ed":function(n,o,p){n.exports=p.p+"fonts/Anton-Regular.b13e6268.ttf"}}]);
